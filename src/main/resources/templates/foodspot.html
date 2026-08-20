@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Spot - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-visual-panel">
+            <div class="animation-sandbox">
+                <div class="falling-element plate-wrapper">
+                    <div class="css-plate"></div>
+                </div>
+                <div class="falling-element spoon item-1"></div>
+                <div class="falling-element fork item-2"></div>
+                <div class="falling-element spoon item-3"></div>
+                <div class="falling-element knife item-4"></div>
+            </div>
+            
+            <h1 class="falling-brand-title">
+                <span style="--i:1">F</span>
+                <span style="--i:2">o</span>
+                <span style="--i:3">o</span>
+                <span style="--i:4">d</span>
+                <span class="space" style="--i:5">&nbsp;</span>
+                <span style="--i:6">S</span>
+                <span style="--i:7">p</span>
+                <span style="--i:8">o</span>
+                <span style="--i:9">t</span>
+            </h1>
+            
+            <div class="visual-overlay">
+                <p>Discover and save your next culinary adventure.</p>
+            </div>
+        </div>
+
+        <div class="login-form-panel">
+            <div class="form-box">
+                
+                <svg class="form-brand-title" viewBox="0 0 320 60">
+                    <text x="50%" y="75%" text-anchor="middle" class="running-text-letters">
+                        <tspan style="--i:1">F</tspan>
+                        <tspan style="--i:2">o</tspan>
+                        <tspan style="--i:3">o</tspan>
+                        <tspan style="--i:4">d</tspan>
+                        <tspan style="--i:5">&nbsp;</tspan>
+                        <tspan style="--i:6">S</tspan>
+                        <tspan style="--i:7">p</tspan>
+                        <tspan style="--i:8">o</tspan>
+                        <tspan style="--i:9">t</tspan>
+                    </text>
+                </svg>
+                
+                <form id="emailForm" class="auth-slide-container active-panel" autocomplete="off">
+                    <div class="input-group">
+                        <input type="email" id="emailInput" placeholder="Email Address" autocomplete="off" autocapitalize="none" aria-label="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <div class="password-container">
+                            <input type="password" id="password" placeholder="Password" autocomplete="new-password" aria-label="Password" required>
+                            <span class="password-toggle-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-status-message hidden-msg"></div>
+
+                    <div class="form-links">
+                        <a href="#" id="toRegisterLink" class="form-link-item">New User? Register</a>
+                        <a href="#" id="forgotPasswordLink" class="form-link-item">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">Login</button>
+
+                    <div class="app-announcement-banner">
+                        We are coming soon on android and ios
+                    </div>
+                </form>
+                
+                <form id="registerForm" class="auth-slide-container hidden-panel" autocomplete="off">
+                    <p class="form-section-title">Create Account</p>
+
+                    <div class="input-group">
+                        <input type="text" id="regName" placeholder="Full Name" autocomplete="off" aria-label="Full Name" required>
+                    </div>
+                    
+                    <div class="input-group email-verification-group">
+                        <div class="email-input-with-btn">
+                            <input type="email" id="regEmail" placeholder="Email ID" autocomplete="off" autocapitalize="none" aria-label="Email ID" required>
+                            <button type="button" class="verify-action-btn">Verify</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" id="regCode" placeholder="6-digit Verification Code" maxlength="6" autocomplete="off" aria-label="Verification Code" required>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="password-container">
+                            <input type="password" id="regPassword" placeholder="Password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$" title="Password must be at least 6 characters long and include 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character." autocomplete="new-password" aria-label="Password" required>
+                            <span class="password-toggle-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="password-container">
+                            <input type="password" id="regConfirmPassword" placeholder="Confirm Password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$" title="Password must match criteria: at least 6 characters long with 1 uppercase, 1 lowercase, 1 number, and 1 special character." autocomplete="new-password" aria-label="Confirm Password" required>
+                            <span class="password-toggle-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="terms-container">
+                        <input type="checkbox" id="termsCheckbox" required>
+                        <label for="termsCheckbox" class="terms-text">
+                            I agree to the <a href="javascript:void(0)" class="terms-link">terms & policy</a>
+                        </label>
+                    </div>
+
+                    <div class="form-status-message hidden-msg"></div>
+                    <button type="submit" class="login-btn">Register</button>
+
+                    <div class="form-links">
+                        <a href="#" id="toLoginLink" class="form-link-item">Already a user? Login</a>
+                        <span></span> 
+                    </div>
+                </form>
+
+                <form id="forgotPasswordForm" class="auth-slide-container hidden-panel" autocomplete="off">
+    <p class="form-section-title">Reset Password</p>
+
+    <div class="input-group email-verification-group">
+        <div class="email-input-with-btn">
+            <input type="email" id="forgotEmail" placeholder="Email ID" autocomplete="off" autocapitalize="none" aria-label="Email ID" required>
+            <button type="button" id="forgotVerifyBtn" class="verify-action-btn">Verify</button>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <input type="text" id="forgotCode" placeholder="6-digit Verification Code" maxlength="6" autocomplete="off" aria-label="Verification Code" required>
+    </div>
+
+    <div class="input-group">
+        <div class="password-container">
+            <input type="password" id="forgotNewPassword" placeholder="New Password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$" title="Password must be at least 6 characters long and include 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character." autocomplete="new-password" aria-label="New Password" required>
+            <span class="password-toggle-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </span>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <div class="password-container">
+            <input type="password" id="forgotConfirmPassword" placeholder="Confirm Password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$" title="Password must match criteria: at least 6 characters long with 1 uppercase, 1 lowercase, 1 number, and 1 special character." autocomplete="new-password" aria-label="Confirm Password" required>
+            <span class="password-toggle-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </span>
+        </div>
+    </div>
+    
+    <div class="form-status-message hidden-msg"></div>
+    <button type="submit" class="login-btn">Change Password</button>
+
+    <div class="form-links">
+        <a href="#" id="backToLoginFromForgot" class="form-link-item">Back to Login</a>
+        <span></span> 
+    </div>
+</form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Food Spot - FoodSpot</title>
+    <link rel="stylesheet" href="/css/home-style.css" th:href="@{/css/home-style.css}">
+    <link rel="stylesheet" href="/css/add-spot-style.css" th:href="@{/css/add-spot-style.css}">
+</head>
+<body>
+
+    <!-- NAVBAR HEADER -->
+    <header class="voldog-navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                 <svg class="form-brand-title" viewBox="0 0 320 60">
+                    <text x="50%" y="75%" text-anchor="middle" class="running-text-letters">
+                        <tspan style="--i:1">F</tspan>
+                        <tspan style="--i:2">o</tspan>
+                        <tspan style="--i:3">o</tspan>
+                        <tspan style="--i:4">d</tspan>
+                        <tspan style="--i:5">&nbsp;</tspan>
+                        <tspan style="--i:6">S</tspan>
+                        <tspan style="--i:7">p</tspan>
+                        <tspan style="--i:8">o</tspan>
+                        <tspan style="--i:9">t</tspan>
+                    </text>
+                </svg>
+            </div>
+            <nav class="nav-menu">
+                <a href="/home" th:href="@{/home}" class="menu-item" style="color: #000000;">Home</a>
+                <a href="#add-spot-section" class="menu-item active" style="color: #f97316;">Add Spot</a>
+                <a href="#contact-section" class="menu-item" style="color: #000000;">Contact Us</a>
+                
+                <!-- Profile with Dropdown Container -->
+                <div class="profile-dropdown-container">
+                    <a href="#" id="profileMenuBtn" class="menu-item" style="color: #000000;">Profile</a>
+                    
+                    <div id="profileDropdown" class="dropdown-content">
+                        <p class="dropdown-name" th:text="${userName}">User Name</p>
+                        <p class="dropdown-email" th:text="${userEmail}">user@example.com</p>
+                        <hr class="dropdown-divider">
+                        <p class="dropdown-rated">You have rated <span id="profile-rated-count" th:text="${userRatedCount}">0</span> spots</p>
+                        <p class="dropdown-rated">You have saved <span id="profile-saved-count" th:text="${userSavedCount}">0</span> spots</p>
+                        <p class="dropdown-rated">You have shared <span id="profile-shared-count" th:text="${userSharedCount}">0</span> spots</p>
+                        <hr class="dropdown-divider">
+                        <p class="dropdown-email" style="font-size: 0.85rem; color: #666;">
+                            Joined: <span th:text="${#temporals.format(userCreatedAt, 'dd-MM-yyyy HH:mm')}">11-08-2026 19:47</span>
+                        </p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="nav-logout-btn">Sign Out</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ADD SPOT FORM SECTION -->
+    <section id="add-spot-section" class="section-nav">
+        <main class="add-spot-container">
+            <div class="add-spot-header">
+                <h1>Know a Food Spot?</h1>
+                <p>Share your favorite local spot, cafe, or restaurant with the community.</p>
+            </div>
+
+            <!-- Google Map Search Picker -->
+             <div class="spot-form-group">
+                    <label for="spotName">Search your spot location on the map</label>
+             </div>
+            <div class="form-map-container">
+                <input id="mapSearchInput" type="text" placeholder="Search place, cafe, or restaurant...">
+                <div id="mapCanvas"></div>
+            </div>
+
+            <!-- Form submitting to your Spring Boot backend endpoint -->
+            <form action="/api/spots" method="POST" enctype="multipart/form-data">
+                
+                <div class="spot-form-group">
+                    <label for="spotName">Spot Name</label>
+                    <input type="text" id="spotName" name="name" placeholder="e.g., Mountain Brews Cafe" required>
+                </div>
+
+                <div class="spot-form-group">
+                    <label for="spotPlace">Spot Place / Address</label>
+                    <input type="text" id="spotPlace" name="place" placeholder="e.g., Street name or locality">
+                </div>
+
+                <div class="spot-form-row">
+                    <div class="spot-form-group">
+                        <label for="district">Spot District</label>
+                        <input type="text" id="district" name="district" placeholder="e.g., Al Ain / Alakode" required>
+                    </div>
+
+                    <div class="spot-form-group">
+                        <label for="state">Spot State / Region</label>
+                        <input type="text" id="state" name="state" placeholder="e.g., Abu Dhabi / Kerala">
+                    </div>
+                </div>
+
+<div class="spot-form-row">
+    <!-- Category Custom Dropdown -->
+    <div class="spot-form-group">
+        <label>Categories (Select all that apply)</label>
+        <div class="custom-dropdown">
+            <div class="dropdown-toggle" id="categoryToggle">
+                <span>Select Categories...</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="dropdown-menu" id="categoryMenu">
+                <label class="checkbox-pill">
+                    <input type="checkbox" name="categories" value="Stay IN"> Stay IN
+                </label>
+                <label class="checkbox-pill">
+                    <input type="checkbox" name="categories" value="Veg"> Veg
+                </label>
+                <label class="checkbox-pill">
+                    <input type="checkbox" name="categories" value="NonVeg"> Non-Veg
+                </label>
+                <label class="checkbox-pill">
+                    <input type="checkbox" name="categories" value="Coolbar"> Coolbar
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spot Phone Number -->
+    <div class="spot-form-group">
+        <label for="phone">Spot Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="+971 50 123 4567">
+    </div>
+</div>
+
+                <div class="spot-form-group">
+                    <label for="speciality">Speciality Dish / Item</label>
+                    <input type="text" id="speciality" name="speciality" placeholder="e.g., Kuzhi Mandi, Falooda">
+                </div>
+
+                <div class="spot-form-group">
+                    <label for="mapLink">Google Maps Link</label>
+                    <input type="url" id="mapLink" name="mapLink" placeholder="Auto-populated or paste URL">
+                </div>
+
+                <div class="spot-form-group">
+                    <label for="directions">Directions / Description</label>
+                    <textarea id="directions" name="directions" rows="3" placeholder="Brief directions or description of the place..."></textarea>
+                </div>
+
+                <div class="spot-form-group">
+                    <label for="spotPhoto">Upload Cover Photo</label>
+                    <input type="file" id="spotPhoto" name="file" accept="image/*">
+                </div>
+
+                <div class="spot-form-group">
+    <label for="spotPhotos">Add More Food Photos</label>
+    <input type="file" id="spotPhotos" name="files" accept="image/*" multiple>
+</div>
+
+               <div class="form-action-buttons">
+                <button type="submit" class="submit-spot-btn">Submit Food Spot</button>
+    <button type="button" id="cancelBtn" class="cancel-spot-btn">Cancel</button>
+    
+</div>
+            </form>
+        </main>
+    </section>
+<!-- Success Message Alert -->
+            <div th:if="${successMessage}" class="success-alert" style="background-color: #d1fae5; color: #065f46; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: 600; text-align: center;">
+                <span th:text="${successMessage}">Spot has been submitted successfully!</span>
+            </div>
+    <!-- RECIPE / CTA SECTION -->
+    <section id="contact-section" class="recipe-cta-section section-nav">
+        <div class="cta-card">
+            <h2>Contact US? Feedback US? Review US?</h2>
+            <p>foodspot@gmail.com|+971 0545325150|+91 8086965610|@foodspot|www.foodspot.com</p>
+            
+            <div class="cta-footer-content">
+                <p class="cta-copyright">&copy; FoodSpot</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Google Maps API script with places library -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNLrxFmrgMZtzaXxEI-dUB_Z8TLg7iQxA&libraries=places&callback=initAddSpotMap"></script>
+    <script src="/js/add-spot.js" th:src="@{/js/add-spot.js}"></script>
+    <script src="/js/home.js" th:src="@{/js/home.js}"></script>
+</body>
+</html>

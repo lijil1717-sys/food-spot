@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodSpot - Fresh & Natural Meals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="data:,">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/home-style.css" th:href="@{/css/home-style.css}">
+</head>
+<body>
+
+    <!-- NAVBAR HEADER -->
+    <header class="voldog-navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                 <svg class="form-brand-title" viewBox="0 0 320 60">
+                    <text x="50%" y="75%" text-anchor="middle" class="running-text-letters">
+                        <tspan style="--i:1">F</tspan>
+                        <tspan style="--i:2">o</tspan>
+                        <tspan style="--i:3">o</tspan>
+                        <tspan style="--i:4">d</tspan>
+                        <tspan style="--i:5">&nbsp;</tspan>
+                        <tspan style="--i:6">S</tspan>
+                        <tspan style="--i:7">p</tspan>
+                        <tspan style="--i:8">o</tspan>
+                        <tspan style="--i:9">t</tspan>
+                    </text>
+                </svg>
+            </div>
+          <nav class="nav-menu">
+    <a href="#search-section" class="menu-item active" style="color: #f97316;">Search</a>
+    <a href="#spots-section" class="menu-item" style="color: #000000;">Spots</a>
+    <a href="#contact-section" class="menu-item" style="color: #000000;">Contact Us</a>
+    
+<!-- Profile with Dropdown Container -->
+<div class="profile-dropdown-container">
+    <a href="#" id="profileMenuBtn" class="menu-item" style="color: #000000;">Profile</a>
+    
+    <div id="profileDropdown" class="dropdown-content">
+        <p class="dropdown-name" th:text="${userName}">User Name</p>
+        <p class="dropdown-email" th:text="${userEmail}">user@example.com</p>
+        <hr class="dropdown-divider">
+        <p class="dropdown-rated">You have rated <span id="profile-rated-count" th:text="${userRatedCount}">0</span> spots</p>
+        <!-- Added Saved Spots Count -->
+        <p class="dropdown-rated">You have saved <span id="profile-saved-count" th:text="${userSavedCount}">0</span> spots</p>
+        <p class="dropdown-rated">You have shared <span id="profile-shared-count" th:text="${userSharedCount}">0</span> spots</p>
+        <!--  DISPLAY CREATED DATE AND TIME -->
+        <hr class="dropdown-divider">
+        <p class="dropdown-email" style="font-size: 0.85rem; color: #666;">
+            Joined: <span th:text="${#temporals.format(userCreatedAt, 'dd-MM-yyyy HH:mm')}">11-08-2026 19:47</span>
+        </p>
+    </div>
+</div>
+    <button id="logoutBtn" class="nav-logout-btn">Sign Out</button>
+</nav>
+        </div>
+    </header>
+
+    <!-- ROUTE MAP SEARCH SECTION -->
+    <section id="search-section" class="meal-finder-section travel-finder-section section-nav">
+        <div class="section-title-container">
+            <h2>Find the <span class="highlight-text">ideal spots</span> for your trip!</h2>
+        </div>
+
+        <div class="map-viewport-container">
+            <div class="floating-search-card">
+                <div class="form-segment travel-input-block">
+                    <div class="segment-content">
+                        <label for="routeFrom">Starting Location</label>
+                        <input type="text" id="routeFrom" placeholder="Search starting location...">
+                    </div>
+                </div>
+
+                <div class="form-segment travel-input-block">
+                    <div class="segment-content">
+                        <label for="routeTo">Travel Destination</label>
+                        <input type="text" id="routeTo" placeholder="Search destination spot...">
+                    </div>
+                </div>
+
+                <button type="button" class="travel-horizontal-search-btn">
+                    <span>Search Route</span>
+                    <div class="arrow-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+
+            <div id="map" class="google-map-canvas"></div>
+        </div>
+    </section>
+
+    <!-- STORE / SPOTS HERO & TAB CONTROL SECTION -->
+    <section id="spots-section" class="store-hero section-nav">
+        <div class="hero-wrapper">
+            <h1>Find The Food Spots on Your Way!</h1>
+
+          <!-- PURE CSS TAB CONTROLS -->
+            <div class="category-tabs">
+                
+                <!-- "All Spots" button clears everything -->
+                <button type="button" 
+                        id="all-spots-btn"
+                        class="tab-btn" 
+                        th:classappend="${selectedDistrict == null and selectedFilter == null} ? 'active' : ''" 
+                        onclick="loadSpots(event, '/home')">
+                    All Spots
+                </button>
+                
+               <!-- District Dropdown -->
+                <select id="district-select" 
+                        class="tab-btn" 
+                        th:classappend="${selectedDistrict != null} ? 'active' : ''" 
+                        onchange="handleDistrictSelection(this)">
+                    <option value="" th:selected="${selectedDistrict == null}">Districts</option>
+                    <option value="Kasaragod" th:selected="${selectedDistrict == 'Kasaragod'}">Kasaragod</option>
+                    <option value="Kannur" th:selected="${selectedDistrict == 'Kannur'}">Kannur</option>
+                    <option value="Kozhikode" th:selected="${selectedDistrict == 'Kozhikode'}">Kozhikode</option>
+                    <option value="Wayanad" th:selected="${selectedDistrict == 'Wayanad'}">Wayanad</option>
+                    <option value="Malappuram" th:selected="${selectedDistrict == 'Malappuram'}">Malappuram</option>
+                    <option value="Thrissur" th:selected="${selectedDistrict == 'Thrissur'}">Thrissur</option>
+                    <option value="Ernakulam" th:selected="${selectedDistrict == 'Ernakulam'}">Ernakulam</option>
+                </select>
+
+                <!-- Top Spots Tab -->
+                <button type="button" 
+                        id="top-spots-btn"
+                        class="tab-btn" 
+                        th:classappend="${selectedFilter == 'top'} ? 'active' : ''" 
+                        onclick="onFilterClick('top')">
+                    Top Spots
+                </button>
+
+                <!-- Stay In Tab -->
+                <button type="button" 
+                        id="stay-in-btn"
+                        class="tab-btn" 
+                        th:classappend="${selectedFilter == 'stayin'} ? 'active' : ''" 
+                        onclick="onFilterClick('stayin')">
+                    Stay In
+                </button>
+
+                <!-- Non Veg Tab -->
+                <button type="button" 
+                        id="non-veg-btn"
+                        class="tab-btn" 
+                        th:classappend="${selectedFilter == 'nonveg'} ? 'active' : ''" 
+                        onclick="onFilterClick('nonveg')">
+                    Non Veg
+                </button>
+
+                <!-- Veg Tab -->
+                <button type="button" 
+                        id="veg-btn"
+                        class="tab-btn" 
+                        th:classappend="${selectedFilter == 'veg'} ? 'active' : ''" 
+                        onclick="onFilterClick('veg')">
+                    Veg
+                </button>
+
+                <!-- Coolbar Tab -->
+                <button type="button" 
+                        id="coolbar-btn"
+                        class="tab-btn" 
+                        th:classappend="${selectedFilter == 'coolbar'} ? 'active' : ''" 
+                        onclick="onFilterClick('coolbar')">
+                    Coolbar
+                </button>
+
+                <!-- Saved Spots Tab -->
+                <button type="button" 
+                        id="saved-spots-btn"
+                        class="tab-btn" 
+                        th:classappend="${selectedFilter == 'saved'} ? 'active' : ''" 
+                        onclick="onFilterClick('saved')">
+                    ❤️ Saved
+                </button>
+            </div>
+            <hr class="section-divider">
+        </div>
+    </section>
+
+    <!-- YOUR FOOD SPOTS SECTION WRAPPER -->
+    <div id="food-spots-section-wrapper" th:fragment="spotSectionFragment">
+        <section>
+            <div id="card-overlay" class="card-overlay"></div>
+
+            <div class="display-division">
+                <h2 class="section-title">Saved Food Spots</h2>
+                
+                <div id="food-spots-slider-container" class="food-spots-slider-wrapper">
+                    <div id="food-spots-container">
+                        <div th:each="spot, iterStat : ${spots}" 
+                             class="food-spot-card" 
+                             th:data-page="${iterStat.index / 8}"
+                             th:style="${iterStat.index >= 8} ? 'display: none;' : ''">
+                           
+                            <div class="spot-details">
+                                <h3 th:text="${spot.name}" class="spot-name">Spot Name</h3>
+                                
+                                <p class="spot-info location">
+                                    <strong>📍 Location:</strong> 
+                                    <span th:text="${spot.exactPlace} + ', ' + ${spot.place} + ', ' + ${spot.district} + ', ' + ${spot.state}">Location details</span>
+                                </p>
+                                
+                                <p class="spot-info special">
+                                    <strong>✨ Special:</strong> <span th:text="${spot.special}">Special item</span>
+                                </p>
+                                
+                                <!-- BADGES ROW -->
+                                <div class="spot-badges-row">
+                                    <p th:if="${spot.stayIn}" class="spot-info stay">
+                                        <span class="stay-in">🏨 Stay-in Available</span>
+                                    </p>
+                                    <p th:unless="${spot.stayIn}" class="spot-info stay">
+                                        <span class="stay-out">🏠 No Stay-in</span>
+                                    </p>
+
+                                    <p th:if="${spot.nonveg}" class="spot-info stay">
+                                        <span class="stay-in">🍗 Non-Veg</span>
+                                    </p>
+
+                                    <p th:if="${spot.veg}" class="spot-info stay">
+                                        <span class="stay-in">🥕 Veg</span>
+                                    </p>
+
+                                    <p th:if="${spot.coolbar}" class="spot-info stay">
+                                        <span class="stay-in">🍦 Coolbar</span>
+                                    </p>
+                                </div>
+
+                                <p class="spot-directions">
+                                    <strong>🧭 Directions:</strong> <span th:text="${spot.direction}">Directions note</span>
+                                </p>
+
+                                <p class="spot-directions">
+                                    <strong>📞 Contact:</strong> 
+                                    <a th:href="|tel:${spot.phoneNumber}|" class="call-link" onclick="event.stopPropagation();">
+                                        <span th:text="${spot.phoneNumber}">Contact Number</span>
+                                    </a>
+                                </p>
+
+                                <p class="spot-directions">
+                                    <strong>📌 </strong> 
+                                    <a th:href="'https://www.google.com/maps/search/?api=1&query=' + ${#uris.escapePathSegment(spot.name)} + ',' + ${#uris.escapePathSegment(spot.place)} + ',' + ${#uris.escapePathSegment(spot.district)} + '&query_place_id=&ll=' + ${spot.latitude} + ',' + ${spot.longitude}" target="_blank" class="map-link" onclick="event.stopPropagation();">
+                                        🗺️ Open in Google Maps
+                                    </a>
+                                </p>
+
+                            <!-- REVIEW BOX -->
+<div class="spot-review-container">
+    <div class="spot-review-box" th:with="myReview=${userReviewsMap.get(spot.id)}">
+        <form class="spotReviewForm" onsubmit="submitReviewAjax(event, this)">
+            <input type="hidden" name="spotId" th:value="${spot.id}">
+            
+            <label class="review-box-label">Give Your Rating</label>
+            
+            <div class="star-rating-row">
+                <span class="star" th:classappend="${myReview != null && myReview.ratings >= 1} ? 'filled'" data-value="1" onclick="onStarClick(this)">★</span>
+                <span class="star" th:classappend="${myReview != null && myReview.ratings >= 2} ? 'filled'" data-value="2" onclick="onStarClick(this), event.stopPropagation()">★</span>
+                <span class="star" th:classappend="${myReview != null && myReview.ratings >= 3} ? 'filled'" data-value="3" onclick="onStarClick(this), event.stopPropagation()">★</span>
+                <span class="star" th:classappend="${myReview != null && myReview.ratings >= 4} ? 'filled'" data-value="4" onclick="onStarClick(this), event.stopPropagation()">★</span>
+                <span class="star" th:classappend="${myReview != null && myReview.ratings >= 5} ? 'filled'" data-value="5" onclick="onStarClick(this), event.stopPropagation()">★</span>
+                
+                <input type="hidden" class="selectedRatingValue" th:value="${myReview != null ? myReview.ratings : 0}">
+            </div>
+            
+            <div class="comment-input-wrapper" onclick="event.stopPropagation();">
+                <textarea class="review-textarea" placeholder="Write a review..." rows="2" th:text="${myReview != null ? myReview.review : ''}"></textarea>
+                
+                <button type="submit" class="whatsapp-send-btn" title="Send review">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="review-success-msg" style="display: none;"></div>
+        </form>
+    </div>
+</div>
+                            </div>
+
+                            <div class="spot-media-container">
+                                <div th:if="${spot.photoUrl}" class="spot-photo-wrapper">
+                                    <img th:src="${spot.photoUrl}" th:alt="${spot.name}" class="spot-photo">
+                                </div>
+
+                               <div class="spot-rating-box">
+    <div class="star-rating" 
+         th:data-spot-id="${spot.id}" 
+         th:data-rating="${spotAverages.get(spot.id)}" 
+         th:data-count="${spotCounts.get(spot.id)}">
+        
+        <span class="star" data-rating="1">★</span>
+        <span class="star" data-rating="2">★</span>
+        <span class="star" data-rating="3">★</span>
+        <span class="star" data-rating="4">★</span>
+        <span class="star" data-rating="5">★</span>
+    </div>
+    
+    <!-- Nested spans for the 2 lines of text -->
+    <span class="rating-count-text">
+        <span class="avg-score-text"></span>
+        <br>
+        <span class="count-number-text"></span>
+    </span>
+</div>
+</div>
+                                
+                            <div class="view-form">
+                                <button type="button" class="view-btn" onclick="event.stopPropagation(); zoomCardAndShowPhotos(this);">
+                                    🖼️ Food Gallery
+                                </button>
+                            </div>
+
+                            <button type="button" class="close-zoom-btn" onclick="event.stopPropagation(); closeCardZoom(this);">
+                                ×
+                            </button>
+
+                            <div class="card-gallery-grid" onclick="event.stopPropagation();">
+                                <div th:each="galleryPhoto : ${spot.foodPhotosUrls}" class="gallery-item">
+                                    <img th:src="${galleryPhoto}" alt="Food Gallery Photo">
+                                </div> 
+                                <p th:if="${spot.foodPhotosUrls == null or #lists.isEmpty(spot.foodPhotosUrls)}" class="no-photos-msg">
+                                    No extra food photos uploaded yet for this spot.
+                                </p>
+                            </div>
+
+                            <!-- Save Bookmark Button (Bottom Right) -->
+                        <button type="button" 
+                                class="save-spot-btn" 
+                                th:classappend="${userSavedSpotIds != null and userSavedSpotIds.contains(spot.id)} ? 'saved' : ''"
+                                th:data-spot-id="${spot.id}" 
+                                onclick="toggleSaveSpot(this)">
+                            <svg class="save-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </button>
+                    </div> <!-- End of food-spot-card -->
+
+                        </div> 
+                        
+                        <p th:if="${#lists.isEmpty(spots)}" class="empty-state-msg">
+                            No food spots saved yet.
+                        </p>
+                    </div> 
+
+                    <!-- Styled Centered Pagination Controls -->
+                    <div th:if="${spots != null and #lists.size(spots) > 8}" class="stylish-pagination-controls">
+                        <button type="button" class="page-nav-btn prev-btn" onclick="slideFoodSpots(-1)">
+                            <span>‹</span> Prev
+                        </button>
+                        <div id="pagination-numbers-container" class="pagination-numbers-flex">
+                            <!-- Dynamically populated via JS -->
+                        </div>
+                        <button type="button" class="page-nav-btn next-btn" onclick="slideFoodSpots(1)">
+                            Next <span>›</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- DYNAMIC ROUTE PRODUCT CARD TEMPLATE -->
+    <template id="productCardTemplate">
+        <div class="product-card" data-cat="meals">
+            <div class="product-badge card-badge"></div>
+            <div class="img-frame card-image"></div>
+            <div class="product-info">
+                <span class="product-category card-category"></span>
+                <h3 class="card-name"></h3>
+                
+                <div class="size-selector card-size-selector"></div>
+
+                <div class="price-action-row">
+                    <div class="price-block">
+                        <span class="currency">📍</span>
+                        <span class="amount card-place" style="font-size:13px; font-weight:normal;"></span>
+                    </div>
+                    <button class="add-to-cart-btn card-call-btn">Call</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- RECIPE / CTA SECTION -->
+    <section id="contact-section" class="recipe-cta-section section-nav">
+       <div class="cta-card">
+    <h2>Contact US? Feedback US? Review US?</h2>
+    <p>foodspot@gmail.com|+971 0545325150|+91 8086965610|@foodspot|www.foodspot.com</p>
+    
+    <div class="cta-footer-content">
+    <p class="cta-copyright">&copy; FoodSpot</p>
+   <a href="/add-spot" style="text-decoration: none;">
+    <button class="cta-action-btn">You Know One Spot</button>
+</a>
+</div>
+</div>
+    </section>
+
+    <script src="../static/js/home.js" th:src="@{/js/home.js}"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNLrxFmrgMZtzaXxEI-dUB_Z8TLg7iQxA&libraries=places&callback=initMap"></script>
+</body>
+</html>

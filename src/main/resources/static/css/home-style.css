@@ -1,0 +1,1860 @@
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ==========================================================================
+   🗂️ GRID WRAPPER AND CARD CONTAINER RULES
+   ========================================================================== */
+.display-division, 
+.display-division * {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.display-division {
+    max-width: 1300px;
+    margin: 0 auto 50px auto;
+    padding: 0 5px;
+}
+
+.section-title {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+#food-spots-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); 
+    gap: 20px;
+}
+
+.empty-state-msg {
+    grid-column: 1 / -1;
+    color: #a0a0a0;
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* ==========================================================================
+   🖼️ FOOD SPOT PRESENTATION CARD COMPONENTS
+   ========================================================================== */
+.food-spot-card {
+    position: relative; /* CRITICAL Anchor point for sub-form absolute buttons */
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+}
+
+.food-spot-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: #ff6e40;
+}
+
+/* Card Information Details Layout */
+.spot-details { flex: 1; }
+.spot-name { margin: 0 0 5px 0; color: #1e3d59; }
+
+.spot-info { margin: 2px 0; font-size: 13px; color: #7f8c8d; }
+.spot-info.special { margin: 8px 0 4px 0; color: #434e52; }
+.spot-info.stay { margin: 15px 0 15px 0; color: #434e52; }
+
+/* Stay In/Out Badges */
+.stay-in {
+    background: #e8f5e9; 
+    color: #2e7d32; 
+    padding: 3px 8px; 
+    border-radius: 20px; 
+    font-weight: bold; 
+    border: 1px solid #c8e6c9;
+}
+
+.stay-out {
+    background: #f5f5f5; 
+    color: #7f8c8d; 
+    padding: 3px 8px; 
+    border-radius: 20px; 
+    font-weight: bold; 
+    border: 1px solid #e0e0e0;
+}
+
+/* Directions Formatting Block */
+.spot-directions {
+    margin: 8px 0 0 0;
+    font-size: 12px;
+    width: 280px;
+    color: #555;
+    background: #f9f9f9;
+    padding: 8px;
+    border-left: 3px solid #ff6e40;
+    border-radius: 0 4px 4px 0;
+}
+
+.spot-map {
+    margin: 12px 0 0 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 13px;
+    display: block;
+}
+
+/* Primary Card Image Configuration */
+.spot-photo-wrapper {
+    width: 250px;
+    height: 150px;
+    flex-shrink: 0;
+}
+
+
+
+/* Core Interaction Anchors */
+.call-link {
+    display: inline-flex;
+    align-items: center;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+.call-link:hover { background-color: #e7f3ff; color: #0056b3; text-decoration: underline; }
+
+.map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+    padding: 3px 8px;
+    background-color: #e3f2fd;
+    color: #0d47a1;
+    border: 1px solid #bbdefb;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.2s ease;
+}
+.map-link:hover { background-color: #0d47a1; color: #ffffff; border-color: #0d47a1; box-shadow: 0 2px 6px rgba(13, 71, 161, 0.2); }
+
+/* Card Form Controls Setup (Grid Level Positioning) */
+.view-form   { position: absolute; bottom: 15px; right: 208px; z-index: 5; }
+.edit-form   { position: absolute; bottom: 15px; right: 108px; z-index: 5; }
+.delete-form { position: absolute; bottom: 15px; right: 15px;  z-index: 5; }
+
+/* Custom Form Actions Buttons Framework UI */
+.view-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.view-btn   { background-color: #ffd968; color: #925f00; border: 1px solid #f6a904; width: 150px; }
+
+
+.view-btn:hover   { background-color: #c69428; color: #ffffff; border-color: #f6a904; box-shadow: 0 4px 10px rgba(182, 198, 40, 0.2); }
+
+
+/* ==========================================================================
+   💻 INTERMEDIATE ENLARGED MODAL DISPLAY MODE (.is-expanded)
+   ========================================================================== */
+.card-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.card-overlay.active { opacity: 1; pointer-events: auto; }
+
+/* Expanded Card Mode */
+.food-spot-card.is-expanded {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 100%;
+    max-width: 1100px;
+    height: auto;
+    max-height: 85vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+    padding: 30px;
+    box-sizing: border-box;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: #ff6e40;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+/* Ensure inner content wrappers don't force overflow */
+.food-spot-card.is-expanded .spot-media-container {
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+}
+
+.food-spot-card.is-expanded.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Component scaling adjustments inside intermediate open view */
+.food-spot-card.is-expanded .spot-photo-wrapper { 
+    width: 500px; 
+    height: 250px; 
+    object-fit: cover;
+    margin-top: 50px;
+ }
+.food-spot-card.is-expanded .spot-name { font-size: 1.8rem; }
+.food-spot-card.is-expanded .spot-info { font-size: 15px; margin: 8px 0; }
+
+/* Control positions shift in modal view */
+.food-spot-card.is-expanded .view-form   { position: absolute; bottom: 10px; right: 275px; display: block; }
+
+.food-spot-card.is-expanded .view-btn{ padding: 8px 16px; font-size: 14px; }
+
+/* ==========================================================================
+   📸 ADVANCED PHOTOS ZOOM GALLERY MODE (.is-zoomed)
+   ========================================================================== */
+.card-gallery-grid {
+    display: none; /* Kept completely invisible during standard layout views */
+    height: 450px;
+    width:900px;
+    margin-bottom: 20px;
+}
+
+.food-spot-card.is-zoomed {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90% !important;
+    max-width: 900px !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    z-index: 10000 !important;
+    background: #ffffff !important;
+    padding: 30px 30px 50px 30px;
+    border-radius: 16px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Hide standard components entirely when zoom grid layer opens up */
+.food-spot-card.is-zoomed .spot-details,
+.food-spot-card.is-zoomed .spot-photo-wrapper,
+.food-spot-card.is-zoomed .view-form,
+.food-spot-card.is-zoomed .edit-form,
+.food-spot-card.is-zoomed .delete-form {
+    display: none !important;
+}
+
+/* Core grid initialization engine rules */
+.food-spot-card.is-zoomed .card-gallery-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* Individual looping items wrapper coordinates configuration */
+.gallery-item {
+    position: relative !important; /* CRITICAL anchor point for absolute .btn tracking overlay styles */
+    width: 100%;
+    height: 450px; /* Force uniform container tracking box constraints layout */
+    border-radius: 12px;
+    gap:15px;
+    overflow: hidden;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: scale(1);
+    transition: opacity 0.3s ease, transform 0.3s ease; 
+}
+
+.food-spot-card.is-zoomed .card-gallery-grid img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit:fill !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transition: filter 0.2s ease;
+}
+
+
+
+/* --------------------------------------------------------------------------
+   🎯 THE DEAD-CENTERED INTERACTIVE HOVER BUTTON ARCHITECTURE (.btn)
+   -------------------------------------------------------------------------- */
+.card-gallery-grid .btn {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    
+    /* Active Flexbox centering alignment engine */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    background-color: rgba(0, 0, 0, 0.4); /* Dims photo backdrop area */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    z-index: 10;
+}
+
+
+
+/* Hover triggers: Shows the button layout on grid item interaction pointer tracks */
+.gallery-item:hover img {
+    filter: brightness(0.7) blur(1px);
+}
+
+.gallery-item:hover .btn {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.gallery-item:hover .btn .delete-photo {
+    transform: scale(1);
+}
+
+/* Interactive feedback on direct hover focus actions on the red button */
+
+
+/* --------------------------------------------------------------------------
+   ❌ SCREEN CLOSING UTILITY CONTROLS
+   -------------------------------------------------------------------------- */
+.close-zoom-btn {
+    display: none;
+}
+
+.food-spot-card.is-zoomed .close-zoom-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10200;
+    
+    width: 40px;
+    height: 40px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.food-spot-card.is-zoomed .close-zoom-btn:hover { background-color: #dc2626; }
+.food-spot-card.is-zoomed .close-zoom-btn:active { transform: scale(0.95); }
+
+/* ==========================================================================
+   GLOBAL LAYOUT & BASE PREFERENCES
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+    background-color: #F8F9F8;
+    color: #2D312E;
+}
+
+textarea {
+    resize: vertical;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.section-divider {
+    margin: 40px auto;
+    max-width: 600px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+/* ==========================================================================
+   TOP INFO BANNER
+   ========================================================================== */
+.top-announcement {
+    background-color: #2D4A3E; /* Soft Dark Organic Forest Green */
+    color: #FFFFFF;
+    text-align: center;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* ==========================================================================
+   NAVIGATION BAR & ANIMATED BRAND LOGO
+   ========================================================================== */
+.voldog-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 1);
+    border-bottom: 1px solid #EAEAEA;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.voldog-navbar.scrolled {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.brand-dark { color: #2D4A3E; }
+.brand-accent { color: #E86A33; }
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.menu-item {
+    text-decoration: none;
+    color: #555E59;
+    font-weight: 600;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.menu-item:hover, .menu-item.active {
+    color: #E86A33;
+}
+
+.nav-logout-btn {
+    background-color: transparent;
+    border: 1px solid #CCCCCC;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    color: #555E59;
+    transition: all 0.2s ease;
+}
+
+.nav-logout-btn:hover {
+    border-color: #E86A33;
+    color: #E86A33;
+}
+
+/* SVG Text Outline & Zoom Animation */
+.form-brand-title {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    perspective: 800px;
+    overflow: visible;
+}
+
+.running-text-letters tspan {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 2.2rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    fill: transparent;
+    stroke: #f97316;
+    stroke-width: 1.5px;
+    stroke-dasharray: 150;
+    stroke-dashoffset: 150;
+    display: inline-block;
+    transform-origin: center;
+    opacity: 0;
+    animation: 
+        textPerspectiveZoom 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards,
+        textLineTracer 4s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.08s + 0.2s);
+}
+
+@keyframes textPerspectiveZoom {
+    0% {
+        transform: scale(4) translateZ(300px);
+        filter: blur(10px);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+        filter: blur(3px);
+    }
+    100% {
+        transform: scale(1) translateZ(0);
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+@keyframes textLineTracer {
+    0%, 100% {
+        stroke-dashoffset: 150;
+        fill: transparent;
+    }
+    30%, 70% {
+        stroke-dashoffset: 0;
+        fill: #2D4A3E;
+    }
+}
+
+/* ==========================================================================
+   ROUTE MAP SEARCH SECTION
+   ========================================================================== */
+.section-title-container {
+    padding: 0 20px;
+}
+
+.map-viewport-container {
+    position: relative;
+    width: 100%;
+    height: 550px;
+    border-radius: 32px;
+    box-shadow: 0 16px 48px rgba(28, 45, 36, 0.08);
+    overflow: hidden;
+    margin-top: 65px;
+}
+
+.google-map-canvas {
+    width: 100%;
+    height: 100%;
+    background-color: #e5e3df;
+    z-index: 1;
+}
+
+.floating-search-card {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1100px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.floating-search-card .travel-input-block {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f4f7f5;
+    border-radius: 12px;
+    padding: 10px 16px;
+    border: 1px solid transparent;
+    transition: all 0.25s ease;
+}
+
+.floating-search-card .travel-input-block:focus-within {
+    border-color: #8da47e;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(141, 164, 126, 0.12);
+}
+
+.floating-search-card .segment-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.floating-search-card label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4a5c50;
+    margin-bottom: 2px;
+    pointer-events: none;
+}
+
+.floating-search-card input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1c2d24;
+    width: 100%;
+}
+
+.floating-search-card input::placeholder {
+    color: #a3b2a8;
+    font-weight: 400;
+}
+
+.travel-horizontal-search-btn {
+    background-color: #dbe842;
+    border: none;
+    outline: none;
+    padding: 0 24px;
+    height: 54px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.travel-horizontal-search-btn:hover {
+    background-color: #cbd832;
+}
+
+.travel-horizontal-search-btn span {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1c2d24;
+}
+
+.floating-search-card .arrow-circle {
+    width: 28px;
+    height: 28px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1c2d24;
+}
+
+.floating-search-card .arrow-circle svg {
+    width: 14px;
+    height: 14px;
+}
+
+.pac-container {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    border: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    margin-top: 4px;
+    z-index: 1100 !important;
+}
+
+/* ==========================================================================
+   STORE / SPOTS HERO & CSS TAB NAVIGATION
+   ========================================================================== */
+.store-hero {
+    background-color: #FFFFFF;
+    padding: 50px 20px 5px 20px;
+    padding-top: 100px;
+    text-align: center;
+    border-bottom: 1px solid #ECECEC;
+}
+
+.hero-wrapper h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1A2420;
+    margin-bottom: 5px;
+}
+
+/* Radio Control Hide */
+.tab-radio {
+    display: none !important;
+}
+
+.category-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    background: #F1F3F1;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444E49;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+    background: #E4E8E4;
+}
+
+/* Active Pure CSS Tab Selectors */
+#tab-all:checked ~ .category-tabs label[for="tab-all"],
+#tab-meals:checked ~ .category-tabs label[for="tab-meals"],
+#tab-treats:checked ~ .category-tabs label[for="tab-treats"],
+#tab-superfoods:checked ~ .category-tabs label[for="tab-superfoods"] {
+    background: #E86A33;
+    color: #FFFFFF;
+}
+
+.tab-pane {
+    display: none;
+}
+
+#tab-all:checked ~ .tab-content-container .pane-all,
+#tab-meals:checked ~ .tab-content-container .pane-meals,
+#tab-treats:checked ~ .tab-content-container .pane-treats,
+#tab-superfoods:checked ~ .tab-content-container .pane-superfoods {
+    display: block;
+}
+
+/* ==========================================================================
+   ADMIN-STYLE FOOD SPOT DISPLAY & CARDS
+   ========================================================================== */
+.display-division {
+    max-width: 1300px;
+    margin: 0 auto 50px auto;
+    padding: 0 5px;
+    text-align: left;
+}
+
+.section-title {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    color: #2c3e50;
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+#food-spots-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); 
+    gap: 20px;
+}
+
+.product-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); 
+    gap: 20px;
+}
+
+.empty-state-msg {
+    grid-column: 1 / -1;
+    color: #a0a0a0;
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Administrative Card Setup */
+.food-spot-card {
+    position: relative; /* CRITICAL Anchor point for sub-form absolute buttons */
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+    text-align: left;
+}
+
+.food-spot-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: #ff6e40;
+}
+
+.spot-details { flex: 1; }
+.spot-name { margin: 0 0 5px 0; color: #1e3d59; font-size: 1.2rem; font-weight: 700; }
+
+.spot-info { margin: 2px 0; font-size: 13px; color: #7f8c8d; }
+.spot-info.special { margin: 8px 0 4px 0; color: #434e52; }
+.spot-info.stay { margin: 15px 0 15px 0; color: #434e52; }
+
+/* Badges */
+.stay-in {
+    background: #e8f5e9; 
+    color: #2e7d32; 
+    padding: 3px 8px; 
+    border-radius: 20px; 
+    font-weight: bold; 
+    border: 1px solid #c8e6c9;
+}
+
+.stay-out {
+    background: #f5f5f5; 
+    color: #7f8c8d; 
+    padding: 3px 8px; 
+    border-radius: 20px; 
+    font-weight: bold; 
+    border: 1px solid #e0e0e0;
+}
+
+/* Directions & Links */
+.spot-directions {
+    margin: 8px 0 0 0;
+    font-size: 12px;
+    width: 280px;
+    color: #555;
+    background: #f9f9f9;
+    padding: 8px;
+    border-left: 3px solid #ff6e40;
+    border-radius: 0 4px 4px 0;
+}
+
+.call-link {
+    display: inline-flex;
+    align-items: center;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+.call-link:hover { background-color: #e7f3ff; color: #0056b3; text-decoration: underline; }
+
+.map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+    padding: 3px 8px;
+    background-color: #e3f2fd;
+    color: #0d47a1;
+    border: 1px solid #bbdefb;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.map-link:hover { background-color: #0d47a1; color: #ffffff; border-color: #0d47a1; box-shadow: 0 2px 6px rgba(13, 71, 161, 0.2); }
+
+/* Spot Main Cover Image */
+.spot-photo-wrapper {
+    width: 250px;
+    height: 150px;
+    flex-shrink: 0;
+}
+
+.spot-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+.spot-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.view-btn, .edit-btn, .delete-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+
+.view-btn:hover   { background-color: #c1c628; color: #ffffff; border-color: #b3c628; box-shadow: 0 4px 10px rgba(182, 198, 40, 0.2); }
+.edit-btn:hover   { background-color: #42c628; color: #ffffff; border-color: #42c628; box-shadow: 0 4px 10px rgba(40, 198, 40, 0.2); }
+.delete-btn:hover { background-color: #c62828; color: #ffffff; border-color: #c62828; box-shadow: 0 4px 10px rgba(198, 40, 40, 0.2); }
+
+/* ==========================================================================
+   MODAL OVERLAY & ZOOM GALLERY STATES
+   ========================================================================== */
+.card-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.card-overlay.active { opacity: 1; pointer-events: auto; }
+
+/* Expanded Card Mode */
+.food-spot-card.is-expanded {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 90%;
+    max-width: 1100px;
+    height: auto;
+    max-height: 85vh;
+    overflow-y: auto;
+    z-index: 1000;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: #ff6e40;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+.food-spot-card.is-expanded.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+
+.food-spot-card.is-expanded .view-form   { position: absolute; bottom: 30px; right: 30px; display: block; }
+
+
+
+/* Zoom Photo Grid Mode */
+.card-gallery-grid {
+    display: none;
+    height: 450px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.food-spot-card.is-zoomed {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90% !important;
+    max-width: 900px !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    z-index: 10000 !important;
+    background: #ffffff !important;
+    padding: 30px 30px 50px 30px;
+    border-radius: 16px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.food-spot-card.is-zoomed .spot-details,
+.food-spot-card.is-zoomed .spot-photo-wrapper,
+.food-spot-card.is-zoomed .view-form,
+.food-spot-card.is-zoomed .edit-form,
+.food-spot-card.is-zoomed .delete-form {
+    display: none !important;
+}
+
+.food-spot-card.is-zoomed .card-gallery-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.gallery-item {
+    position: relative !important;
+    width: 100%;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.food-spot-card.is-zoomed .card-gallery-grid img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transition: filter 0.2s ease;
+}
+
+/* Hover Delete Button on Gallery Photo */
+.card-gallery-grid .btn {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    z-index: 10;
+}
+
+
+.gallery-item:hover img { filter: brightness(0.7) blur(1px); }
+.gallery-item:hover .btn { opacity: 1 !important; visibility: visible !important; }
+.gallery-item:hover .btn .delete-photo { transform: scale(1); }
+.card-gallery-grid .btn .delete-photo:hover { background-color: #dc2626 !important; transform: scale(1.06) !important; }
+
+/* Modal Close Button */
+.close-zoom-btn { display: none; }
+.food-spot-card.is-zoomed .close-zoom-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10200;
+    width: 40px;
+    height: 40px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.2s ease;
+}
+
+/* ==========================================================================
+   ROUTE PRODUCT CARDS & CTA FOOTER
+   ========================================================================== */
+.store-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 30px;
+}
+
+.recipe-cta-section {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.cta-card {
+    background: linear-gradient(to right, #2D4A3E, #3D6152);
+    border-radius: 12px;
+    padding: 40px;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.cta-card h2 { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
+.cta-card p { font-size: 14px; opacity: 0.9; margin-bottom: 20px; }
+
+.cta-action-btn {
+    background: #FFFFFF;
+    color: #2D4A3E;
+    border: none;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.cta-action-btn:hover { background: #F1F3F1; }
+
+
+/* Base styling to match your tab buttons */
+select.tab-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: transparent; 
+    border: 1px solid #ccc; /* Match your existing button borders if any */
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    padding: 8px 30px 8px 15px;
+    border-radius: 20px;
+    outline: none;
+    transition: background-color 0.2s, color 0.2s;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+#district-select {
+    appearance: none;            /* Removes default browser styling */
+    -webkit-appearance: none;    /* Removes Safari/Chrome default styling */
+    -moz-appearance: none;       /* Removes Firefox default styling */
+    background: transparent;     /* Prevents background repeating artifacts */
+    background-image: none;      /* Ensures no repeating arrow graphics */
+    padding-right: 25px;         /* Gives space for a clean custom arrow if desired */
+    cursor: pointer;
+}
+
+/* Turns the button orange and changes text to white once a district is selected */
+select.tab-btn.selected {
+    background-color: #f97316 !important;
+    color: #ffffff !important;
+    border-color: #f97316 !important;
+    /* Adjust arrow color to white for visibility on orange */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Styled dropdown menu options */
+select.tab-btn option {
+    background-color: #ffffff;
+    color: #1c2d24;
+    padding: 12px;
+    font-size: 14px;
+}
+
+/* Highlight option on hover */
+select.tab-btn option:hover {
+    background-color: #fef3c7;
+}
+
+/* Hide radio buttons */
+.tab-radio {
+    display: none;
+}
+
+/* Default tab-btn styling */
+.tab-btn {
+    /* Add your default button styles here (padding, border, background, etc.) */
+    cursor: pointer;
+}
+
+/* ACTIVE STATES (Turns Orange when checked) */
+#tab-all:checked ~ .category-tabs label[for="tab-all"],
+#tab-top:checked ~ .category-tabs label[for="tab-top"],
+#tab-saty:checked ~ .category-tabs label[for="tab-saty"],
+#tab-district:checked ~ .category-tabs #district-select {
+    background-color: orange; /* Sets background to orange */
+    color: #fff;              /* Optional: text color white for contrast */
+}
+
+.tab-btn.active {
+    background-color: orange !important;
+    color: #fff !important;
+}
+
+.tab-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #f1f1f1;
+    color: #333;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* Active state styling */
+.tab-btn.active {
+    background-color: orange !important;
+    color: #fff !important;
+}
+
+/* Target the district dropdown cleanly inside category-tabs */
+.category-tabs #district-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    padding: 10px 32px 10px 20px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1f2937;
+    cursor: pointer;
+    text-align: center;
+    text-align-last: center;
+    outline: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f2937' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    transition: all 0.2s ease;
+}
+
+/* Active or focused state */
+.category-tabs #district-select.active, 
+.category-tabs #district-select:focus {
+    background-color: #ffffff;
+    border-color: #9ca3af;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Dropdown list items */
+.category-tabs #district-select option {
+    background-color: #ffffff;
+    color: #1f2937;
+    padding: 12px;
+    text-align: center;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.nav-menu .menu-item {
+    color: #000000;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.nav-menu .menu-item.active {
+    color: #f97316;
+}
+
+/* ==========================================================================
+   STYLISH PAGINATION CONTROLS DESIGN
+   ========================================================================== */
+.stylish-pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 45px;
+    margin-bottom: 30px;
+    padding: 10px;
+}
+
+.pagination-numbers-flex {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-num-pill {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    color: #475569;
+    font-weight: 600;
+    font-size: 14px;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-num-pill:hover {
+    border-color: #f97316;
+    color: #f97316;
+    background: #fff7ed;
+}
+
+.page-num-pill.active {
+    background: #f97316;
+    border-color: #f97316;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
+}
+
+.page-nav-btn {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    color: #1e293b;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover:not(:disabled) {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.page-nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #f1f5f9;
+}
+
+/* Hide the view button container by default */
+.food-spot-card .view-form {
+    display: none;
+}
+
+/* Show the view button only when the card is expanded or zoomed */
+.food-spot-card.is-expanded .view-form,
+.food-spot-card.is-zoomed .view-form {
+    display: block; /* or flex, depending on your original layout */
+}
+
+/* Orange bordered box for card media container */
+.spot-rating-box {
+    display: inline-flex;
+    align-items: center;
+    align-content: center;
+    margin-left: 30%;
+    padding: 6px 10px;
+    border: 1.5px solid #f97316; /* Orange border */
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    width: fit-content;
+    margin-top: 12px; /* <--- Adjust this value to add more or less space */
+}
+
+/* Card star display colors */
+.spot-rating-box .star {
+    font-size: 16px;
+    color: #d1d5db; /* Empty star color */
+    cursor: pointer;
+}
+
+.spot-rating-box .star.filled {
+    color: #f97316; /* Filled orange star color */
+}
+
+.food-spot-card.is-zoomed .spot-rating-box {
+    display: none !important;
+}
+.food-spot-card.is-zoomed {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1000px;
+    height: auto;
+    max-height: 85vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 10000;
+    background: #ffffff;
+    padding: 20px 30px;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+}
+
+.food-spot-card.is-zoomed .card-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+.food-spot-card.is-zoomed .card-gallery-grid::after {
+    content: "";
+    grid-column: 1 / -1;
+    height: 40px;
+}
+
+.food-spot-card.is-zoomed .card-gallery-grid img,
+.food-spot-card.is-zoomed .card-gallery-grid .gallery-item {
+    width: 100%;
+    height: 400px;
+    border-radius: 12px;
+    box-sizing: border-box;
+}
+.no-photos-msg {
+    display: none;
+}
+
+.food-spot-card.is-zoomed .no-photos-msg {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #64748b;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 50px;
+    padding: 100px 0; /* Keeps it compact and centered vertically without stretching the card */
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.food-spot-card.is-zoomed .card-gallery-grid .no-photos-msg {
+    grid-column: 1 / -1; 
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #64748b;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 40px 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.spot-badges-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+/* Ensure the paragraph tags don't force block line breaks inside the flex row */
+.spot-badges-row .spot-info {
+    margin: 0;
+    display: inline-flex;
+}
+
+/* Hide the review container completely when the card is NOT expanded */
+.food-spot-card:not(.is-expanded) .spot-review-container {
+    display: none !important;
+}
+
+/* Show the review container only when the card IS expanded */
+.food-spot-card.is-expanded .spot-review-container {
+    display: block !important;
+    margin-top: 12px;
+}
+
+.food-spot-card.is-expanded .spot-rating-box{
+    margin-left: 200px;
+}
+
+/* Style the review box itself */
+.spot-review-box {
+    border: 1.5px solid #f97316;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: #fffaf5;
+    width: 100%;
+    max-width: 320px;
+}
+
+/* Form layout inside the review box */
+.spot-review-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+/* Label at the top of the box */
+.review-box-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* 5-Star Row Layout */
+.spot-review-box .star-rating-row {
+    display: flex;
+    gap: 6px;
+}
+
+.spot-review-box .star-rating-row .star {
+    font-size: 24px;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: color 0.15s ease-in-out, transform 0.1s ease;
+}
+
+.spot-review-box .star-rating-row .star:hover {
+    transform: scale(1.1);
+}
+
+.spot-review-box .star-rating-row .star.filled {
+    color: #f97316;
+}
+
+/* Text area wrapper */
+.comment-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.comment-input-wrapper textarea {
+    width: 100%;
+    padding: 8px 36px 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 13px;
+    resize: none;
+    outline: none;
+    background-color: #ffffff;
+    box-sizing: border-box;
+}
+
+.comment-input-wrapper textarea:focus {
+    border-color: #d1d5db; 
+    box-shadow: none;
+}
+
+/* WhatsApp style send button */
+.whatsapp-send-btn {
+    position: absolute;
+    right: 8px;
+    bottom: 10px;
+    background: #25d366;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.whatsapp-send-btn:hover {
+    background: #20ba5a;
+    transform: scale(1.05);
+}
+
+.whatsapp-send-btn svg {
+    transform: rotate(-30deg);
+    margin-left: 1px;
+}
+
+/* Success message text style */
+.review-success-msg {
+    font-size: 12px;
+    font-weight: 500;
+    color: #16a34a;
+    text-align: center;
+    margin-top: 4px;
+}
+
+/* =========================================
+   Profile Dropdown Styles
+   ========================================= */
+
+
+
+.profile-dropdown-container .menu-item {
+    cursor: pointer;
+}
+
+/* Container styling for the whole dropdown if you need a baseline */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #ffffff;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 12px 16px;
+    z-index: 1000;
+    font-family: inherit;
+}
+
+/* User Name styling */
+.dropdown-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: #111827;
+    margin: 0 0 4px 0;
+}
+
+/* User Email styling */
+.dropdown-email {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0 0 8px 0;
+    word-break: break-all;
+}
+
+/* Separator line between user info and stats */
+.dropdown-divider {
+    border: none;
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 8px 0;
+}
+
+/* Rated spots count line styling */
+.dropdown-rated {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Style the actual number count to pop with your active theme color */
+.dropdown-rated span {
+    font-weight: 700;
+    color: #f97316;
+    background-color: #ffedd5;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.spot-rating-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+}
+
+.rating-count-text {
+    line-height: 1.2;
+}
+
+/* Line 1: Average Rating Score (e.g., 4/5) */
+.avg-score-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333333;
+}
+
+/* Line 2: Total Ratings Count (e.g., 2 ratings) */
+.count-number-text {
+    font-size: 10px;
+    color: #777777;
+    font-weight: 400;
+}
+
+/* 1. Make sure your main header / navbar container is positioned with a massive z-index */
+header, .navbar, .top-nav-bar {
+    position: relative; /* or sticky / fixed */
+    z-index: 99999 !important;
+}
+
+/* 2. Ensure the dropdown container sits on top within that header */
+.profile-dropdown-container {
+    position: relative;
+    z-index: 100000 !important;
+}
+
+#profileDropdown.dropdown-content {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 100001 !important;
+    background-color: #ffffff;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+}
+
+/* 3. Drop the gallery grid and its parent card stacking order down */
+.card-gallery-grid, 
+.expanded-spot-card, 
+.spot-card-container {
+    z-index: 1 !important; /* Keeps cards safely below the header layer */
+}
+
+
+/* Save Button Positioned using absolute inside the card content layout */
+.food-spot-card {
+    position: relative; /* ONLY if absolute elements inside need it, but use safe spacing instead */
+}
+
+/* Let's fix the save button alignment safely */
+.save-spot-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+    z-index: 5;
+}
+
+.save-spot-btn:hover {
+    transform: scale(1.1);
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+}
+
+.save-spot-btn .save-icon {
+    stroke: #4b5563;
+    fill: none;
+    transition: fill 0.2s, stroke 0.2s;
+}
+
+/* Active Saved State (Orange fill) */
+.save-spot-btn.saved {
+    background-color: #ffedd5;
+    border-color: #fed7aa;
+}
+
+.save-spot-btn.saved .save-icon {
+    stroke: #f97316;
+    fill: #f97316;
+}
+
+.food-spot-card.is-expanded .save-spot-btn {
+    bottom: auto;
+    top: 20px;
+    right: 20px;
+}
+.food-spot-card.is-zoomed .save-spot-btn {
+    display: none !important;
+}
+
+/* Ensure the expanded card pushes down below the sticky header */
+.food-spot-card.is-expanded {
+    position: fixed !important; /* Or absolute, depending on your layout */
+    top: 100px !important; /* Adjust this value (e.g., 80px - 110px) to match your navbar height */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 9999 !important; /* Safely below your header (which is 99999) but above everything else */
+    max-height: calc(100vh - 110px) !important;
+    overflow-y: auto !important;
+}
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+@media (max-width: 992px) {
+    #food-spots-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .map-viewport-container {
+        height: 650px;
+    }
+
+    .floating-search-card {
+        flex-direction: column;
+        align-items: stretch;
+        width: 92%;
+        gap: 8px;
+        top: 16px;
+        padding: 16px;
+    }
+
+    .travel-horizontal-search-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .food-spot-card {
+        flex-direction: column;
+        padding-bottom: 60px; /* Space for action buttons on mobile */
+    }
+
+    .spot-photo-wrapper {
+        width: 100%;
+        height: 200px;
+    }
+
+    .view-form   { right: 190px; }
+    .edit-form   { right: 100px; }
+    .delete-form { right: 10px; }
+}
+
+
+
+/* ==========================================================================
+   📱 MOBILE RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+@media (max-width: 600px) {
+    #food-spots-container {
+        grid-template-columns: 1fr;
+    }
+    .display-division {
+        max-width: 500px;
+    }
+}

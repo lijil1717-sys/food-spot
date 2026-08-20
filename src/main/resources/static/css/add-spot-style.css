@@ -1,0 +1,282 @@
+/* ==========================================================================
+   ADD SPOT FORM PAGE STYLING
+   ========================================================================== */
+.add-spot-container {
+    max-width: 800px;
+    margin: 120px auto 60px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 20px;
+    /* Updated with a narrow border and orange glow shadow */
+    border: 1.5px solid #fed7aa;
+    box-shadow: 0 10px 30px rgba(249, 115, 22, 0.15), 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.add-spot-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.add-spot-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1A2420;
+    margin-bottom: 8px;
+}
+
+.add-spot-header p {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+}
+
+/* Map Picker Integration Styles */
+.form-map-container {
+    width: 100%;
+    height: 350px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border: 1.5px solid #e2e8f0;
+    overflow: hidden;
+    position: relative;
+}
+
+#mapSearchInput {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    max-width: 450px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+    outline: none;
+    font-family: inherit;
+}
+
+#mapSearchInput:focus {
+    border-color: #f97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+#mapCanvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* Form Layout Styles */
+.spot-form-group {
+    margin-bottom: 20px;
+}
+
+.spot-form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2D4A3E;
+    margin-bottom: 8px;
+}
+
+.spot-form-group input,
+.spot-form-group textarea,
+.spot-form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: #1c2d24;
+    background-color: #f8fafc;
+    outline: none;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+.spot-form-group input:focus,
+.spot-form-group textarea:focus,
+.spot-form-group select:focus {
+    border-color: #f97316;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.spot-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+.form-action-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.form-action-buttons .submit-spot-btn,
+.form-action-buttons .cancel-spot-btn {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.form-action-buttons .submit-spot-btn {
+    grid-column: 1;
+    background-color: #f97316;
+    color: #ffffff;
+    border: none;
+}
+
+.form-action-buttons .cancel-spot-btn {
+    grid-column: 2;
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1.5px solid #cbd5e1;
+}
+
+.form-action-buttons .submit-spot-btn:hover {
+    background-color: #ea580c;
+}
+
+.form-action-buttons .cancel-spot-btn:hover {
+    background-color: #e2e8f0;
+}
+/* ==========================================================================
+   CUSTOM DROPDOWN & CHECKBOX STYLING FIX
+   ========================================================================== */
+
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-toggle {
+    width: 100%;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #475569;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 105%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    box-sizing: border-box;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+/* Fixes the spacing and alignment between the checkbox and its label text */
+.dropdown-menu .checkbox-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background-color: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #1e293b;
+    font-weight: 500;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu .checkbox-pill:hover {
+    background-color: #f1f5f9;
+}
+
+.dropdown-menu .checkbox-pill input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #f97316;
+    margin: 0;
+    cursor: pointer;
+}
+
+.spot-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Success Message Alert Styles */
+.success-alert {
+    background-color: #d1fae5;
+    color: #065f46;
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    font-weight: 600;
+    text-align: center;
+    border: 1px solid #a3e635;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    animation: slideDownFade 0.4s ease-out forwards;
+}
+
+@keyframes slideDownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   📱 MOBILE RESPONSIVE ADAPTATIONS
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .add-spot-container {
+        margin: 90px 15px 40px 15px;
+        padding: 20px;
+    }
+    
+    .spot-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .form-map-container {
+        height: 280px;
+    }
+
+    #mapSearchInput {
+        width: 90%;
+        top: 10px;
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+}

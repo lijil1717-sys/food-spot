@@ -1,0 +1,920 @@
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #f8f9fa;
+}
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  
+  /* Task: Ensures the browser defaults to displaying scrollbars if content clips */
+  overflow-y: auto; 
+  overflow-x: hidden;
+}
+
+/* Container Layout */
+.login-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Left Side - Cinematic Branding Panel (Takes up 70% of the screen) */
+.login-visual-panel {
+  flex: 7; /* Increased from 1 to 7 to take the majority of the space */
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
+              url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1470') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  padding: 40px;
+}
+
+.visual-overlay {
+  text-align: center;
+  max-width: 500px;
+}
+
+.visual-overlay h1 {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.visual-overlay p {
+  font-size: 1.3rem;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+/* Right Side - Sleek Form Panel (Takes up 30% of the screen) */
+.login-form-panel {
+  flex: 3; /* Decreased from 1 to 3 to make it a narrow, elegant section */
+  min-width: 360px; /* Prevents the form from becoming too crushed on smaller monitors */
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  border-left: 1px solid #e9ecef;
+}
+
+.form-box {
+  width: 100%;
+  max-width: 340px;
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  
+  /* Start with a neutral, light-gray border */
+  border: 1px solid #e5e7eb; 
+  box-shadow: 0 10px 30px rgba(249, 115, 22, 0.15); 
+  
+  /* Smooth animation transition for the border and shadow properties */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.logo{
+  width: 100%;
+  max-width: 340px;
+  background: #ffffff;
+  padding: 40px 30px;
+}
+
+/* This triggers instantly when the cursor hovers anywhere over the box container */
+.form-box:hover {
+  border-color: #f97316; /* Changes the light border to solid theme-matched Orange */
+  
+  /* Makes the orange shadow slightly deeper and more pronounced on hover */
+  box-shadow: 0 12px 35px rgba(249, 115, 22, 0.25); 
+}
+
+.form-box h2 {
+  font-size: 1.8rem;
+  color: #212529;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 30px;
+}
+
+/* Input Fields */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+.input-group input {
+  padding: 12px;
+  font-size: 0.95rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #f97316; /* Clean theme-matched Orange */
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.login-btn:hover {
+  background-color: #ea580c; /* Deeper orange tint on hover state */
+}
+
+.input-group input:focus {
+  border-color: #f97316; /* Focus ring border changes to orange */
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.verify-btn {
+  background-color: #10b981;
+}
+
+.verify-btn:hover {
+  background-color: #059669;
+}
+
+.back-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #6c757d;
+  margin-top: 15px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+/* Status Notifications */
+.status-message {
+  padding: 10px;
+  background-color: #eff6ff;
+  color: #1e40af;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 1px solid #bfdbfe;
+}
+
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
+
+.login-visual-panel {
+  flex: 7;
+  
+  /* REPLACED IMAGE LAYER WITH A CLEAN, SOLID MATTE BG */
+  background: #1e293b; /* Modern Slate-Dark color */
+  
+  /* ALTERNATIVE: Elegant dark gray-to-black gradient if you want subtle depth */
+  /* background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- Pure CSS Plate Representation --- */
+.css-plate {
+  width: 200px;
+  height: 200px;
+  background: #ffffff;
+  border-radius: 50%;
+  border: 15px solid #f1f5f9; /* Inner rim line depth */
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.1), 
+                    0 15px 25px rgba(0, 0, 0, 0.4); /* Outer heavy shadow */
+}
+
+/* --- Pure CSS Cutlery Shapes --- */
+/* Spoon: Oval head with a narrow handle */
+.spoon {
+  width: 24px !important;
+  height: 50px !important;
+  background: #cbd5e1; /* Silver metallic tone */
+  border-radius: 50% 50% 40% 40%;
+  position: relative;
+}
+.spoon::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: 8px;
+  width: 8px;
+  height: 40px;
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* Fork: Base block with individual prong cutouts */
+.fork {
+  width: 22px !important;
+  height: 45px !important;
+  background: #cbd5e1;
+  border-radius: 4px 4px 12px 12px;
+  position: relative;
+}
+.fork::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 5px;
+  width: 3px;
+  height: 25px;
+  background: #1e293b; /* Matches your slate background to look like empty slots */
+  box-shadow: 9px 0 0 #1e293b;
+}
+.fork::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: 7px;
+  width: 8px;
+  height: 40px;
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* Knife: Long sleek sharp blade */
+.knife {
+  width: 10px !important;
+  height: 85px !important;
+  background: #e2e8f0;
+  border-radius: 2px 12px 2px 2px;
+  position: relative;
+}
+.knife::after {
+  content: '';
+  position: absolute;
+  bottom: -35px;
+  left: 1px;
+  width: 8px;
+  height: 35px;
+  background: #94a3b8; /* Darker silver handle handles */
+  border-radius: 2px;
+}
+
+.animation-sandbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allows clicks to pass through safely */
+}
+
+/* Base class for all dropping elements */
+.falling-element {
+  position: absolute;
+  user-select: none;
+}
+
+/* --- 1. Main Plate Logic --- */
+.plate-wrapper {
+  left: 50%;
+  top: -350px; /* Start completely off-screen */
+  transform: translateX(-50%);
+  /* Uses your custom bounce cubic-bezier curve */
+  animation: plateFallDown 1.6s cubic-bezier(0.25, 1.5, 0.5, 1) forwards;
+  z-index: 2;
+}
+
+.animated-plate {
+  width: 260px;
+  height: auto;
+  filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0.4));
+}
+
+@keyframes plateFallDown {
+  0% {
+    top: -350px;
+    transform: translateX(-50%) rotate(-45deg);
+  }
+  60% {
+    top: 45%; /* Settles right around center aspect height */
+    transform: translateX(-50%) rotate(10deg);
+  }
+  80% {
+    top: 41%; /* Minor bounce recoil upward */
+    transform: translateX(-50%) rotate(-3deg);
+  }
+  100% {
+    top: 43%; /* Final resting coordinates */
+    transform: translateX(-50%) rotate(0deg);
+  }
+}
+
+/* --- 2. Cutlery Rain Logic --- */
+.spoon, .fork, .knife {
+  width: 50px;
+  height: auto;
+  top: -150px;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.3));
+  opacity: 0;
+  animation: cutleryRain 2.2s ease-out forwards;
+}
+
+/* Stagger horizontal spawning locations across the panel view */
+.item-1 { left: 25%; animation-delay: 0.2s; transform: rotate(15deg); }
+.item-2 { left: 38%; animation-delay: 0.5s; transform: rotate(-35deg); }
+.item-3 { left: 62%; animation-delay: 0.1s; transform: rotate(70deg); }
+.item-4 { left: 75%; animation-delay: 0.7s; transform: rotate(-15deg); }
+
+@keyframes cutleryRain {
+  0% {
+    top: -150px;
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+  15% {
+    opacity: 1; /* Fade into view as they pass into the screen boundary */
+  }
+  70% {
+    top: 52%; /* Drops slightly past the plate line */
+    transform: rotate(180deg);
+  }
+  85% {
+    top: 47%; /* Tiny float bounce adjustments */
+    transform: rotate(160deg);
+  }
+  100% {
+    top: 49%; /* Final resting coordinates floating near the plate */
+    opacity: 0.95;
+    transform: rotate(165deg);
+  }
+}
+
+/* Container for the title */
+.falling-brand-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 69%;
+  display: flex;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 4.8rem;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  z-index: 6;
+  margin: 0;
+  padding: 0;
+  perspective: 1000px; 
+}
+
+/* Individual Letter Configuration */
+.falling-brand-title span {
+  display: inline-block;
+  color: #ffffff; /* Clean white text face */
+  
+  /* Task: Only a crisp, narrow orange outline */
+  -webkit-text-stroke: 1px #f97316; 
+  
+  /* Removed all 3D extrusion blocks - left only a soft ambient glow behind it */
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  position: relative;
+  opacity: 0; 
+  
+  /* Keeps your user perspective zoom animation active */
+  animation: letterPerspectiveZoom 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+  animation-delay: calc(var(--i) * 0.08s + 0.3s); 
+}
+
+/* Keeps spacing exact between words */
+.falling-brand-title span.space {
+  width: 20px;
+}
+
+
+/* Container for the SVG Layout */
+.running-brand-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 62%;
+  width: 90%;
+  max-width: 550px;
+  height: auto;
+  z-index: 6;
+  perspective: 1000px;
+}
+
+/* Base properties for the SVG Typography Text Core */
+.drawing-text tspan {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  
+  /* Initial Styles */
+  fill: transparent; /* Starts hollow with no internal white color fill */
+  stroke: #f97316;    /* Vibrant thematic Orange trace line */
+  stroke-width: 1.5px;
+  
+  /* Creates a dash loop pattern (length of line, length of empty gap) */
+  stroke-dasharray: 400; 
+  stroke-dashoffset: 400; /* Pushes the stroke entirely out of view to start hidden */
+  
+  display: inline-block;
+  opacity: 0;
+  
+  /* Combines the perspective zoom entry with the outline tracer runtime */
+  animation: 
+    letterPerspectiveZoom 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards,
+    outlineTracer 2s ease-in-out forwards;
+  
+  /* Sequential delay cascade calculations */
+  animation-delay: calc(var(--i) * 0.08s + 0.3s);
+}
+
+/* --- User Perspective Zoom Animation Engine --- */
+@keyframes letterPerspectiveZoom {
+  0% {
+    transform: scale(4) translateZ(300px);
+    filter: blur(10px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    filter: blur(3px);
+  }
+  100% {
+    transform: scale(1) translateZ(0);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+/* --- Running Outline Tracer Animation Engine --- */
+@keyframes outlineTracer {
+  0% {
+    stroke-dashoffset: 400; /* Line hasn't started moving yet */
+    fill: transparent;
+  }
+  60% {
+    stroke-dashoffset: 0;   /* The outline actively runs and wraps around the character boundaries */
+    fill: transparent;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    fill: #ffffff;          /* Smoothly bleeds solid white inside once the outline trace is complete */
+  }
+}
+
+
+/* --- User Perspective Zoom Animation Engine --- */
+@keyframes letterPerspectiveZoom {
+  0% {
+    /* Starts massive (zoomed past the user's viewpoint), 
+       rotated slightly, blurry, and completely invisible 
+    */
+    transform: scale(4) translateZ(300px) rotateX(-45deg);
+    filter: blur(10px);
+    opacity: 0;
+  }
+  15% {
+    /* Becomes visible rapidly as it travels into view */
+    opacity: 0.7;
+    filter: blur(4px);
+  }
+  65% {
+    /* Slams slightly deeper past the flat screen layer (impact crunch) */
+    transform: scale(0.9) translateZ(-20px) rotateX(10deg);
+    filter: blur(0);
+    opacity: 1;
+  }
+  85% {
+    /* Elastic rebound pushing slightly closer again */
+    transform: scale(1.05) translateZ(10px) rotateX(-5deg);
+  }
+  100% {
+    /* Settles perfectly flat on the dashboard UI matrix */
+    transform: scale(1) translateZ(0) rotateX(0deg);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+/* Adjust subtitle offset to rest perfectly underneath the dropped text */
+.visual-overlay {
+  position: absolute;
+  bottom: 12%; /* Anchors the subtitle nicely below the title's landing zone */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  text-align: center;
+  width: 100%;
+  max-width: 450px;
+}
+
+.visual-overlay p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  font-weight: 300;
+  color: #cbd5e1;
+}
+/* Container for the text frame alignment */
+.form-brand-title {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin: 0 auto 20px auto;
+  display: block;
+  perspective: 800px;
+  overflow: visible;
+}
+
+/* Core typography configuration matching normal text */
+.running-text-letters tspan {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem; /* Clean, standard header text sizing */
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  
+  /* Running outline tracing properties */
+  fill: transparent;
+  stroke: #f97316; /* Clean orange accent stroke line */
+  stroke-width: 1px;
+  stroke-dasharray: 150;
+  stroke-dashoffset: 150;
+  
+  display: inline-block;
+  transform-origin: center;
+  opacity: 0;
+  
+  /* Blends perspective zoom entry with running trace timelines */
+  animation: 
+    textPerspectiveZoom 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards,
+    textLineTracer 2s ease-in-out forwards;
+  
+  /* Sequential stagger cascade */
+  animation-delay: calc(var(--i) * 0.08s + 0.2s);
+}
+
+/* --- Perspective Zoom Animation Engine --- */
+@keyframes textPerspectiveZoom {
+  0% {
+    transform: scale(4) translateZ(300px);
+    filter: blur(10px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    filter: blur(3px);
+  }
+  100% {
+    transform: scale(1) translateZ(0);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+/* --- Running Line Animation Engine --- */
+@keyframes textLineTracer {
+  0% {
+    stroke-dashoffset: 150;
+    fill: transparent;
+  }
+  60% {
+    stroke-dashoffset: 0; /* Line races completely around the font curves */
+    fill: transparent;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    fill: #ffffff; /* Text finishes completely filled with standard dark color */
+  }
+}
+
+
+
+/* --- Form Footer Hyperlink Configurations --- */
+.form-links {
+  display: flex;
+  justify-content: space-between; /* Spreads links evenly to left and right edges */
+  align-items: center;
+  margin-top: 20px; /* Breathing gap below the login button block */
+  margin-bottom: 28px;
+  width: 100%;
+}
+
+.form-link-item {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 10;
+  color: #f97316; /* Clean theme-matching orange link color */
+  text-decoration: none; /* Strips ugly default underline line */
+  
+  /* Smooth drop-shadow effect to meet requirements */
+  text-shadow: 0 1px 2px rgba(249, 115, 22, 0.25);
+  
+  /* Transition framework for interactive responses */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Interactive Hover Reactions */
+.form-link-item:hover {
+  color: #ea580c; /* Deepens to a rich dark orange state */
+  text-shadow: 0 4px 8px rgba(234, 88, 12, 0.4); /* Enhances the orange shadow glow on focus */
+  transform: translateY(-1px); /* Delicate lift physics reaction */
+  text-decoration: underline; /* Standard interactive indicator accent */
+}
+
+/* Ensure the parent box contains the absolute sliding forms neatly */
+.form-box {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Base styles for both independent forms */
+.auth-slide-container {
+  width: 100%;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Visibility State Classes managed by JS */
+.active-panel {
+  position: relative;
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.hidden-panel {
+  position: absolute;
+  top: 60px; /* Aligns right beneath the animating SVG title header */
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateX(50px); /* Slides slightly out to the right side */
+  pointer-events: none;
+}
+
+/* Heading tweaks inside forms */
+.form-section-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 5px 2px;
+  text-align: center;
+}
+
+/* Verification Layout Matrix alignment code */
+.verification-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+.verification-row .code-box {
+  flex: 1;
+}
+
+/* Keeps the main group flowing vertically like other form inputs */
+.email-verification-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Horizontal flex row container for the inner components */
+.email-input-with-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Spacing between the input box edge and the button */
+  width: 100%;
+}
+
+/* Forces the email text field to auto-expand to matching uniform widths */
+.email-input-with-btn input[type="email"] {
+  flex: 1;
+  width: 100%;
+}
+
+/* Elegant, uniform styling for the inline verify button */
+.verify-action-btn {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f97316;
+  color: #ffffff;
+  border: none;
+  
+  /* Set this height value to perfectly match your other input boxes */
+  height: 42px; 
+  padding: 0 18px;
+  border-radius: 6px;
+  
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap; /* Keeps the text on a single line inside the button */
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+}
+
+.verify-action-btn:hover {
+  background-color: #ea580c;
+}
+
+.verify-action-btn:active {
+  transform: scale(0.98);
+}
+
+/* Container rules for live messaging updates */
+.form-status-message {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  box-sizing: border-box;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+/* Hide when empty */
+.hidden-msg {
+  display: none;
+}
+
+/* Success Alert Layout Matrix */
+.msg-success {
+  display: block;
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+/* Error Alert Layout Matrix */
+.msg-error {
+  display: block;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* Container to safely align input and eye icon */
+.password-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Ensure password text doesn't hide behind the icon */
+.password-container input {
+    width: 100%;
+    padding-right: 35px; 
+}
+
+/* Styled and downsized eye icon toggle */
+.password-toggle-icon {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    color: #999; /* Subtle gray color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+/* Make the SVG icon itself small */
+.password-toggle-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.password-toggle-icon:hover {
+    color: #444; /* Darkens slightly on hover */
+}
+
+.app-announcement-banner {
+    display: block;
+    text-align: center;
+    background-color: #FFF3EB;      /* Light, soft orange background background */
+    color: #F26E21;                 /* Vivid brand orange text color */
+    border: 1px solid #FFD0B3;      /* Subtle matching orange border */
+    padding: 14px 20px;             /* Spacing inside the pill banner */
+    border-radius: 6px;            /* Smooth rounded capsule look */
+    font-size: 13px;                /* Easily readable typography */
+    font-weight: 600;               /* Medium-bold weighting to pop */
+    margin: 20px 0;                 /* Generous vertical separation below the button */
+    box-sizing: border-box;
+    width: 100%;                    /* Fits snugly within the panel margins */
+}
+
+/* Container for alignment */
+.terms-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;              /* Space between checkbox and text */
+    margin: 15px 0 20px 0; /* Balanced spacing above the register button */
+    width: 100%;
+}
+
+/* Base text styling */
+.terms-text {
+    font-size: 14px;
+    color: #555;
+    user-select: none;     /* Prevents text highlighting when clicking the checkbox */
+    cursor: pointer;
+}
+
+/* Orange and underlined link styling */
+.terms-link {
+    color: #F26E21;        /* Matches your vivid brand orange color */
+    text-decoration: underline;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+}
+
+.terms-link:hover {
+    opacity: 0.8;          /* Gives a subtle visual cue on hover */
+}
+
+/* Optional styling to make the checkbox accent color match your orange theme */
+#termsCheckbox {
+    accent-color: #F26E21; 
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+.terms-link, 
+.terms-link:visited, 
+.terms-link:active {
+    color: #F26E21 !important; /* Forces your brand orange color always */
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+/* Responsive UI Overrides for Mobile Devices */
+@media (max-width: 768px) {
+  .login-visual-panel {
+    display: none; /* Collapses the image side entirely on phone screens */
+  }
+  .login-form-panel {
+    flex: 1;
+    min-width: 100%;
+    padding: 20px;
+    background-color: #f8f9fa;
+  }
+  .form-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+}

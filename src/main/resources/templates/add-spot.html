@@ -10,50 +10,58 @@
 <body>
 
     <!-- NAVBAR HEADER -->
-    <header class="voldog-navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                 <svg class="form-brand-title" viewBox="0 0 320 60">
-                    <text x="50%" y="75%" text-anchor="middle" class="running-text-letters">
-                        <tspan style="--i:1">F</tspan>
-                        <tspan style="--i:2">o</tspan>
-                        <tspan style="--i:3">o</tspan>
-                        <tspan style="--i:4">d</tspan>
-                        <tspan style="--i:5">&nbsp;</tspan>
-                        <tspan style="--i:6">S</tspan>
-                        <tspan style="--i:7">p</tspan>
-                        <tspan style="--i:8">o</tspan>
-                        <tspan style="--i:9">t</tspan>
-                    </text>
-                </svg>
-            </div>
-            <nav class="nav-menu">
-                <a href="/home" th:href="@{/home}" class="menu-item" style="color: #000000;">Home</a>
-                <a href="#add-spot-section" class="menu-item active" style="color: #f97316;">Add Spot</a>
-                <a href="#contact-section" class="menu-item" style="color: #000000;">Contact Us</a>
-                
-                <!-- Profile with Dropdown Container -->
-                <div class="profile-dropdown-container">
-                    <a href="#" id="profileMenuBtn" class="menu-item" style="color: #000000;">Profile</a>
-                    
-                    <div id="profileDropdown" class="dropdown-content">
-                        <p class="dropdown-name" th:text="${userName}">User Name</p>
-                        <p class="dropdown-email" th:text="${userEmail}">user@example.com</p>
-                        <hr class="dropdown-divider">
-                        <p class="dropdown-rated">You have rated <span id="profile-rated-count" th:text="${userRatedCount}">0</span> spots</p>
-                        <p class="dropdown-rated">You have saved <span id="profile-saved-count" th:text="${userSavedCount}">0</span> spots</p>
-                        <p class="dropdown-rated">You have shared <span id="profile-shared-count" th:text="${userSharedCount}">0</span> spots</p>
-                        <hr class="dropdown-divider">
-                        <p class="dropdown-email" style="font-size: 0.85rem; color: #666;">
-                            Joined: <span th:text="${#temporals.format(userCreatedAt, 'dd-MM-yyyy HH:mm')}">11-08-2026 19:47</span>
-                        </p>
-                    </div>
-                </div>
-                <button id="logoutBtn" class="nav-logout-btn">Sign Out</button>
-            </nav>
+<header class="voldog-navbar">
+    <div class="nav-container">
+        <div class="nav-brand">
+             <svg class="form-brand-title" viewBox="0 0 320 60">
+                <text x="50%" y="75%" text-anchor="middle" class="running-text-letters">
+                    <tspan style="--i:1">F</tspan>
+                    <tspan style="--i:2">o</tspan>
+                    <tspan style="--i:3">o</tspan>
+                    <tspan style="--i:4">d</tspan>
+                    <tspan style="--i:5">&nbsp;</tspan>
+                    <tspan style="--i:6">S</tspan>
+                    <tspan style="--i:7">p</tspan>
+                    <tspan style="--i:8">o</tspan>
+                    <tspan style="--i:9">t</tspan>
+                </text>
+            </svg>
         </div>
-    </header>
 
+        <!-- MOBILE HAMBURGER TOGGLE BUTTON -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Toggle Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav class="nav-menu" id="navMenu">
+            <a href="/home" th:href="@{/home}" class="menu-item" style="color: #000000;">Home</a>
+            <a href="#add-spot-section" class="menu-item active" style="color: #f97316;">Add Spot</a>
+            <a href="#contact-section" class="menu-item" style="color: #000000;">Contact Us</a>
+            
+            <!-- Profile with Dropdown Container -->
+            <div class="profile-dropdown-container">
+                <a href="#" id="profileMenuBtn" class="menu-item" style="color: #000000;">Profile</a>
+                
+                <div id="profileDropdown" class="dropdown-content">
+                    <p class="dropdown-name" th:text="${userName}">User Name</p>
+                    <p class="dropdown-email" th:text="${userEmail}">user@example.com</p>
+                    <hr class="dropdown-divider">
+                    <p class="dropdown-rated">You have rated <span id="profile-rated-count" th:text="${userRatedCount}">0</span> spots</p>
+                    <p class="dropdown-rated">You have saved <span id="profile-saved-count" th:text="${userSavedCount}">0</span> spots</p>
+                    <p class="dropdown-rated">You have shared <span id="profile-shared-count" th:text="${userSharedCount}">0</span> spots</p>
+                    <hr class="dropdown-divider">
+                    <p class="dropdown-email" style="font-size: 0.85rem; color: #666;">
+                        Joined: <span th:text="${#temporals.format(userCreatedAt, 'dd-MM-yyyy HH:mm')}">11-08-2026 19:47</span>
+                    </p>
+                </div>
+            </div>
+            
+            <button id="logoutBtn" class="nav-logout-btn">Sign Out</button>
+        </nav>
+    </div>
+</header>
     <!-- ADD SPOT FORM SECTION -->
     <section id="add-spot-section" class="section-nav">
         <main class="add-spot-container">

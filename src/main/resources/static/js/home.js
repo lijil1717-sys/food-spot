@@ -61,6 +61,7 @@ function closeCardZoom(buttonElement) {
     }
 }
 
+
 // ==========================================================================
 // STATIC UI INTERACTIONS & INITIALIZATIONS
 // ==========================================================================
@@ -270,6 +271,7 @@ function initAutocompleteFields() {
         searchBtn.addEventListener('click', calculateRequestedRoute);
     }
 }
+
 
 function calculateRequestedRoute() {
     const originText = document.getElementById('routeFrom').value.trim();
@@ -1087,6 +1089,31 @@ document.addEventListener("DOMContentLoaded", function () {
         if (savedBtn) {
             savedBtn.classList.add('active'); // Add your active filter pill class here if you use one
         }
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const mobileToggle = document.getElementById("mobileMenuToggle");
+    const navMenu = document.getElementById("navMenu");
+
+    if (mobileToggle && navMenu) {
+        mobileToggle.addEventListener("click", function () {
+            navMenu.classList.toggle("active-menu");
+            
+            // Optional: Animate hamburger bars into an 'X'
+            mobileToggle.classList.toggle("is-active");
+        });
+
+        // Close menu automatically when clicking a nav link
+        const navLinks = navMenu.querySelectorAll(".menu-item");
+        navLinks.forEach(link => {
+            link.addEventListener("click", function () {
+                if (!link.id.includes("profileMenuBtn")) {
+                    navMenu.classList.remove("active-menu");
+                    mobileToggle.classList.remove("is-active");
+                }
+            });
+        });
     }
 });
 

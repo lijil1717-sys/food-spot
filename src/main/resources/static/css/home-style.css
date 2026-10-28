@@ -1804,8 +1804,66 @@ header, .navbar, .top-nav-bar {
     max-height: calc(100vh - 110px) !important;
     overflow-y: auto !important;
 }
+
+/* --- Mobile Hamburger Toggle Button (Hidden on Desktop) --- */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.mobile-menu-toggle span {
+    width: 100%;
+    height: 3px;
+    background-color: #333;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
 /* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
+   GLOBAL ZOOMED STATE (Applies whenever .is-zoomed is added by your script)
+   ========================================================================== */
+.food-spot-card.is-zoomed .card-gallery-grid {
+    display: grid !important;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.food-spot-card.is-zoomed .card-gallery-grid img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+
+
+/* ==========================================================================
+   GLOBAL / HAMBURGER ACTIVE STATES
+   ========================================================================== */
+.mobile-menu-toggle.is-active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+.mobile-menu-toggle.is-active span:nth-child(2) {
+    opacity: 0;
+}
+.mobile-menu-toggle.is-active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+
+/* Hide by default on desktop */
+.close-expand-btn {
+    display: none;
+}
+/* ==========================================================================
+   TABLET & LARGE MOBILE MEDIA QUERIES (<= 992px)
    ========================================================================== */
 @media (max-width: 992px) {
     #food-spots-container {
@@ -1832,7 +1890,7 @@ header, .navbar, .top-nav-bar {
 
     .food-spot-card {
         flex-direction: column;
-        padding-bottom: 60px; /* Space for action buttons on mobile */
+        padding-bottom: 12px;
     }
 
     .spot-photo-wrapper {
@@ -1840,15 +1898,276 @@ header, .navbar, .top-nav-bar {
         height: 200px;
     }
 
-    .view-form   { right: 190px; }
-    .edit-form   { right: 100px; }
-    .delete-form { right: 10px; }
+    .view-form, 
+    .edit-form, 
+    .delete-form {
+        position: static;
+        right: auto;
+        left: auto;
+        width: 100%;
+        margin-top: 6px;
+    }
 }
 
+/* ==========================================================================
+   MOBILE MEDIA QUERIES (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .store-hero {
+        padding: 1.25rem 1rem 0.5rem 1rem;
+    }
 
+    .store-hero h1 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        text-align: left;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        color: #111827;
+    }
+
+    .category-tabs {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 8px;
+        margin-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .category-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-tabs .tab-btn {
+        flex: 0 0 auto;
+        font-size: 0.825rem;
+        font-weight: 500;
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: 1px solid #e5e7eb;
+        background-color: #f9fafb;
+        color: #374151;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        outline: none;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .category-tabs select.tab-btn {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 12px;
+        padding-right: 28px;
+    }
+
+    .category-tabs .tab-btn.active {
+        background-color: #f97316;
+        color: #ffffff;
+        border-color: #f97316;
+        font-weight: 600;
+        box-shadow: 0 3px 8px rgba(249, 115, 22, 0.3);
+    }
+
+    .category-tabs select.tab-btn.active {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    }
+
+    .section-divider {
+        border: 0;
+        height: 1px;
+        background-color: #f3f4f6;
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+        position: relative;
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-top: 1px solid #e5e7eb;
+        display: none;
+        z-index: 1000;
+    }
+
+    .nav-menu.active-menu {
+        display: flex;
+    }
+
+    .nav-menu .menu-item, 
+    .nav-menu .nav-logout-btn {
+        width: 100%;
+        margin-bottom: 0.75rem;
+        text-align: left;
+    }
+
+    .profile-dropdown-container {
+        width: 100%;
+    }
+
+    .dropdown-content {
+        position: static;
+        box-shadow: none;
+        width: 100%;
+        border: none;
+        padding-left: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .display-division {
+        padding: 0 0.5rem;
+    }
+
+    #food-spots-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* Default Mobile Food Spot Card */
+    .food-spot-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 12px;
+        font-size: 0.8rem;
+        border-radius: 10px;
+        box-sizing: border-box;
+        margin-bottom: 0;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .food-spot-card .spot-details h3.spot-name {
+        order: 1;
+        font-size: 1.05rem;
+        line-height: 1.2;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
+
+    .food-spot-card .spot-media-container {
+        order: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .food-spot-card .spot-photo-wrapper {
+        width: 100%;
+        height: 180px;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .food-spot-card .spot-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .food-spot-card .spot-rating-box {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        background: #f9fafb;
+        padding: 6px 10px;
+        border-radius: 6px;
+        margin-bottom: 0;
+    }
+
+    .food-spot-card .spot-details {
+        order: 3;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .food-spot-card .spot-details > h3.spot-name {
+        display: none;
+    }
+
+    .food-spot-card .spot-details > p,
+    .food-spot-card .spot-details .spot-info,
+    .food-spot-card .spot-details .spot-directions,
+    .food-spot-card .spot-details .spot-badges-row,
+    .food-spot-card .spot-details .spot-review-container {
+        order: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .food-spot-card .spot-badges-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 2px 0;
+    }
+
+    .food-spot-card .spot-review-container {
+        margin-top: 4px;
+    }
+
+    .food-spot-card .comment-input-wrapper textarea {
+        height: 28px;
+        min-height: 28px;
+        padding: 4px;
+    }
+
+    .food-spot-card .view-form {
+        order: 5;
+        position: static;
+        width: 100%;
+        opacity: 0;
+        visibility: hidden;
+        max-height: 0;
+        overflow: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease, max-height 0.3s ease;
+        margin-top: 0;
+    }
+
+    .food-spot-card .view-btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+}
 
 /* ==========================================================================
-   📱 MOBILE RESPONSIVE MEDIA QUERIES
+   SMALL MOBILE MEDIA QUERIES (<= 600px)
    ========================================================================== */
 @media (max-width: 600px) {
     #food-spots-container {
@@ -1858,3 +2177,326 @@ header, .navbar, .top-nav-bar {
         max-width: 500px;
     }
 }
+/* ==========================================================================
+   MOBILE MEDIA QUERIES (<= 768px) - ZOOMED / SELECTED CARD OVERRIDES
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Zoomed / Selected card container state */
+    #food-spots-container .food-spot-card.zoomed,
+    #food-spots-container .food-spot-card.is-expanded,
+    #food-spots-container .food-spot-card.is-zoomed {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 92%;
+        max-width: 450px;
+        max-height: 85vh;
+        overflow-y: auto;
+        z-index: 10000;
+        background: #ffffff;
+        padding: 24px 16px 20px 16px;
+        border-radius: 16px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+        box-sizing: border-box;
+    }
+
+    /* 1. TOP-LEFT CLOSE BUTTON */
+    #food-spots-container .food-spot-card.zoomed .close-expand-btn,
+    #food-spots-container .food-spot-card.is-expanded .close-expand-btn,
+    #food-spots-container .food-spot-card.is-zoomed .close-expand-btn {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        right: auto;
+        z-index: 20000;
+        pointer-events: auto;
+        width: 34px;
+        height: 34px;
+        background-color: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 2. IMAGE SIZING INSIDE THE ZOOMED DIV */
+    #food-spots-container .food-spot-card.zoomed .spot-photo-wrapper,
+    #food-spots-container .food-spot-card.is-expanded .spot-photo-wrapper,
+    #food-spots-container .food-spot-card.is-zoomed .spot-photo-wrapper {
+        width: 100%;
+        height: 190px;
+        max-height: 200px;
+        margin-top: 36px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    #food-spots-container .food-spot-card.zoomed .spot-photo,
+    #food-spots-container .food-spot-card.is-expanded .spot-photo,
+    #food-spots-container .food-spot-card.is-zoomed .spot-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* 3. RATING BOX - Set to 48% width */
+    #food-spots-container .food-spot-card.zoomed .spot-rating-box,
+    #food-spots-container .food-spot-card.is-expanded .spot-rating-box,
+    #food-spots-container .food-spot-card.is-zoomed .spot-rating-box {
+        display: flex !important;
+        width: 48% !important;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 0 12px 0 !important;
+        padding: 8px 10px;
+        box-sizing: border-box;
+        background-color: #f9fafb;
+        border: 1.5px solid #f97316;
+        border-radius: 8px;
+        min-height: 58px;
+    }
+
+    /* 4. FOOD GALLERY BUTTON - Reduced to 44% to create a distinct gap */
+    #food-spots-container .food-spot-card.zoomed .view-form,
+    #food-spots-container .food-spot-card.is-expanded .view-form,
+    #food-spots-container .food-spot-card.is-zoomed .view-form {
+        display: block !important;
+        position: absolute !important;
+        top: 268px !important; 
+        right: 16px !important;
+        width: 44% !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        max-height: none !important;
+        overflow: visible !important;
+        margin: 0 !important;
+    }
+
+    #food-spots-container .food-spot-card.zoomed .view-btn,
+    #food-spots-container .food-spot-card.is-expanded .view-btn,
+    #food-spots-container .food-spot-card.is-zoomed .view-btn {
+        display: flex !important;
+        width: 100% !important;
+        height: 58px !important; /* Matches the rating box height */
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        box-sizing: border-box;
+        font-size: 0.85rem;
+        border-radius: 8px;
+        text-align: center;
+    }
+  /* 5. KEEP GALLERY GRID HIDDEN UNTIL CLICKED, THEN EXPAND FULLY */
+    #food-spots-container .food-spot-card.zoomed .card-gallery-grid,
+    #food-spots-container .food-spot-card.is-expanded .card-gallery-grid,
+    #food-spots-container .food-spot-card.is-zoomed .card-gallery-grid {
+        display: none !important; 
+    }
+
+    #food-spots-container .food-spot-card.zoomed .card-gallery-grid.active-gallery,
+    #food-spots-container .food-spot-card.is-expanded .card-gallery-grid.active-gallery,
+    #food-spots-container .food-spot-card.is-zoomed .card-gallery-grid.active-gallery {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important; /* Two images per row */
+        gap: 8px !important;
+        width: 100% !important;
+        max-height: none !important;
+        overflow: visible !important;
+        margin-top: 12px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Target the items / images inside the active gallery grid */
+    #food-spots-container .food-spot-card.zoomed .card-gallery-grid.active-gallery img,
+    #food-spots-container .food-spot-card.zoomed .card-gallery-grid.active-gallery .gallery-item {
+        display: block !important;
+        width: 100% !important;
+        height: 110px !important;
+        object-fit: cover !important;
+        border-radius: 6px !important;
+    }
+    /* Ensure any dynamically shown gallery or photo container expands inside the zoomed card */
+    #food-spots-container .food-spot-card.zoomed .gallery-container,
+    #food-spots-container .food-spot-card.zoomed .card-gallery-grid{
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    
+}
+
+/* ==========================================================================
+   DESKTOP ZOOMED STYLES (> 768px)
+   ========================================================================== */
+@media (min-width: 769px) {
+    .food-spot-card.is-zoomed .card-gallery-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns of photos on desktop */
+    }
+    
+    .food-spot-card.is-zoomed .card-gallery-grid img {
+        height: 120px;
+    }
+}
+/* ==========================================================================
+   MOBILE MEDIA QUERIES (<= 768px) - FIXED ZOOMED CARD OVERRIDES
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* 1. Zoomed card container */
+    #food-spots-container .food-spot-card.is-zoomed {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 92% !important;
+        max-width: 450px !important;
+        max-height: 85vh !important;
+        overflow-y: auto !important;
+        z-index: 10000 !important;
+        background: #ffffff !important;
+        padding: 24px 16px 20px 16px !important;
+        border-radius: 16px !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3) !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* 3. Force Image & Media Container to stay visible */
+    #food-spots-container .food-spot-card.is-zoomed .spot-media-container,
+    #food-spots-container .food-spot-card.is-zoomed .spot-photo-wrapper {
+        display: block !important;
+        width: 100% !important;
+        height: 180px !important;
+        margin-top: 28px !important;
+        margin-bottom: 12px !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+    }
+
+    #food-spots-container .food-spot-card.is-zoomed .spot-photo {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    /* 4. Rating Box - Left side (48% width) */
+    #food-spots-container .food-spot-card.is-zoomed .spot-rating-box {
+        display: flex !important;
+        width: 48% !important;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 0 12px 0 !important;
+        padding: 8px 10px !important;
+        box-sizing: border-box !important;
+        background-color: #f9fafb !important;
+        border: 1.5px solid #f97316 !important;
+        border-radius: 8px !important;
+        min-height: 58px !important;
+    }
+
+    /* 5. Food Gallery Button - Right side (44% width) placed cleanly in the same row */
+    #food-spots-container .food-spot-card.is-zoomed .view-form {
+        display: block !important;
+        position: absolute !important;
+        top: 258px !important; 
+        right: 16px !important;
+        width: 44% !important;
+        margin: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    #food-spots-container .food-spot-card.is-zoomed .view-btn {
+        display: flex !important;
+        width: 100% !important;
+        height: 58px !important;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem !important;
+        border-radius: 8px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 6. Gallery Grid layout when opened (2 columns) */
+    #food-spots-container .food-spot-card.is-zoomed .card-gallery-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        width: 100% !important;
+        margin-top: 12px !important;
+    }
+
+    #food-spots-container .food-spot-card.is-zoomed .card-gallery-grid img {
+        width: 100% !important;
+        height: 110px !important;
+        object-fit: cover !important;
+        border-radius: 6px !important;
+    }
+
+    
+}
+@media (max-width: 768px) {
+    /* 1. Completely hide the old banner, rating box, and gallery button when zoomed */
+    #food-spots-container .food-spot-card.is-zoomed .spot-photo-wrapper,
+    #food-spots-container .food-spot-card.is-zoomed .spot-rating-box,
+    #food-spots-container .food-spot-card.is-zoomed .view-form {
+        display: none !important;
+    }
+
+    /* 2. Force the card container to fit the gallery content cleanly */
+    #food-spots-container .food-spot-card.is-zoomed {
+        height: auto !important;
+        max-height: 85vh !important;
+        padding-top: 50px !important; /* Leave room for the close button */
+    }
+
+    /* 3. Render the Gallery Grid in a proper 2-column layout at the top */
+    #food-spots-container .food-spot-card.is-zoomed .card-gallery-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        width: 100% !important;
+        margin-top: 0 !important;
+    }
+
+    /* 4. Style the gallery images nicely */
+    #food-spots-container .food-spot-card.is-zoomed .card-gallery-grid img,
+    #food-spots-container .food-spot-card.is-zoomed .card-gallery-grid .gallery-item {
+        display: block !important;
+        width: 100% !important;
+        height: 110px !important;
+        object-fit: cover !important;
+        border-radius: 6px !important;
+    }
+}
+/* ==========================================================================
+   LARGER GALLERY IMAGE SIZING
+   ========================================================================== */
+
+/* Mobile Sizing (Larger height for the 2-column grid) */
+@media (max-width: 768px) {
+    #food-spots-container .food-spot-card.is-zoomed .card-gallery-grid img,
+    #food-spots-container .food-spot-card.is-zoomed .card-gallery-grid .gallery-item {
+        height: 190px !important; /* Increased height */
+        border-radius: 8px !important;
+    }
+    .whatsapp-send-btn {
+        right: 4px;   /* Decrease to move further right */
+        bottom: 4px;  /* Decrease to move further down */
+    }
+}
+
+

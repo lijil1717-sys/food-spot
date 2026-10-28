@@ -184,7 +184,7 @@ public class AddSpotController {
         newSpotRepository.save(newSpot);
 
         // Flash message and redirect back to the add-spot page
-        redirectAttributes.addFlashAttribute("successMessage", "Spot has been submitted successfully!");
+        redirectAttributes.addFlashAttribute("successMessage", "Spot has been submitted successfully! After the review by admin, the spot will be added to the main page.");
         return "redirect:/add-spot";
     }
 }

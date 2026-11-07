@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // --- 1. CONFIGURATION: DYNAMIC LOCAL / LIVE API ROUTING ---
-    const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-        ? 'http://localhost:8081/api/auth'
-        : '/api/auth';
+const API_URL = '/api/auth';
 
     // Nav Links
     const toRegisterLink = document.getElementById("toRegisterLink");

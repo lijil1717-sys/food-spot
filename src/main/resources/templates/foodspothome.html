@@ -313,8 +313,11 @@
                             </button>
                         </div>
 
-                        <button type="button" class="close-zoom-btn" onclick="event.stopPropagation(); closeCardZoom(this);">
-                            ×
+                        <button type="button"
+                            class="close-expand-btn"
+                            onclick="event.stopPropagation(); closeExpandedCard(this);"
+                            aria-label="Close expanded food spot">
+                         ×
                         </button>
 
                         <div class="card-gallery-grid" onclick="event.stopPropagation();">

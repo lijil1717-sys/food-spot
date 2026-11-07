@@ -2499,4 +2499,42 @@ header, .navbar, .top-nav-bar {
     }
 }
 
+/* MOBILE ONLY - CLOSE EXPANDED FOOD SPOT CARD */
 
+.close-expand-btn {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    #food-spots-container .food-spot-card.is-expanded:not(.is-zoomed) .close-expand-btn {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+
+        position: absolute;
+        top: 25px;
+        left: 12px;
+        right: auto;
+
+        z-index: 20000;
+        width: 34px;
+        height: 34px;
+
+        background-color: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    #food-spots-container .food-spot-card.is-expanded:not(.is-zoomed) .close-expand-btn:active {
+        transform: scale(0.95);
+    }
+}

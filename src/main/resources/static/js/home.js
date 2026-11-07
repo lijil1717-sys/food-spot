@@ -1,9 +1,8 @@
 // ==========================================================================
 // ENVIRONMENT API CONFIGURATION (Local vs. Live Hosting Automatic Switch)
 // ==========================================================================
-const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'http://localhost:8081'  // Your local Java Spring Boot backend port
-    : '';                        // Empty string for production (if frontend & backend share domain)
+// API Configuration: Local and Live Hosting
+const API_BASE_URL = '';                     // Empty string for production (if frontend & backend share domain)
 
 // ==========================================================================
 // CARD EXPANSION & ZOOM UI INTERACTIONS (Event Delegation for AJAX)
@@ -61,7 +60,18 @@ function closeCardZoom(buttonElement) {
     }
 }
 
+function closeExpandedCard(buttonElement) {
+    const card = buttonElement.closest('.food-spot-card');
+    const overlay = document.getElementById('card-overlay');
 
+    if (card) {
+        card.classList.remove('active', 'is-expanded', 'is-zoomed');
+    }
+
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+}
 // ==========================================================================
 // STATIC UI INTERACTIONS & INITIALIZATIONS
 // ==========================================================================
@@ -191,6 +201,7 @@ let destinationAutocomplete;
 let startMarker = null;
 let endMarker = null;
 let foodMarkers = [];
+let foodSpotInfoWindow = null;
 
 function initMap() {
     directionsService = new google.maps.DirectionsService();
@@ -210,6 +221,15 @@ function initMap() {
             strokeWeight: 6
         }
     });
+    // Create one shared popup
+foodSpotInfoWindow = new google.maps.InfoWindow();
+
+// Close popup when clicking an empty area of the map
+map.addListener('click', () => {
+    if (foodSpotInfoWindow) {
+        foodSpotInfoWindow.close();
+    }
+});
     directionsRenderer.setMap(map);
 
     initAutocompleteFields();
@@ -370,31 +390,62 @@ function displayMapMarkers(spots) {
             content: smallCardHtml
         });
 
-        marker.addListener("click", () => {
-            // Close any previously open info windows if needed, then open this one
-            infoWindow.open(map, marker);
+      marker.addListener("click", () => {
 
-            // Once the InfoWindow is rendered into the DOM, attach a click listener to the small card itself
-            google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
-                const smallCardElement = document.getElementById(`small-card-${spot.id}`);
-                if (smallCardElement) {
-                    smallCardElement.addEventListener('click', () => {
-                        // ---> TRIGGER YOUR EXPANDED CARD HERE <---
-                        // Replace 'openExpandedCard(spot)' with whatever function your main UI uses to show the expanded card
-                        if (typeof openExpandedCard === 'function') {
-                            openExpandedCard(spot);
-                        } else {
-                            // Fallback if your app uses a global modal launcher or data attribute selector
-                            showMainSpotExpandedCard(spot);
-                        }
-                    });
-                }
-            });
-        });
+    // Close the previously opened popup
+    foodSpotInfoWindow.close();
+
+    // Set the selected food spot content
+    foodSpotInfoWindow.setContent(smallCardHtml);
+
+    // Open popup for the selected marker
+    foodSpotInfoWindow.open({
+        map: map,
+        anchor: marker
+    });
+
+    // Handle expanded food spot card
+    google.maps.event.addListenerOnce(
+        foodSpotInfoWindow,
+        'domready',
+        () => {
+
+            const smallCardElement =
+                document.getElementById(`small-card-${spot.id}`);
+
+            if (smallCardElement) {
+
+                smallCardElement.addEventListener('click', () => {
+
+                    foodSpotInfoWindow.close();
+
+                    if (typeof openExpandedCard === 'function') {
+                        openExpandedCard(spot);
+                    } else {
+                        showMainSpotExpandedCard(spot);
+                    }
+
+                });
+            }
+        }
+    );
+
+});
 
         foodMarkers.push(marker);
     });
 }
+
+document.addEventListener('click', (event) => {
+
+    const clickedInsideMap =
+        event.target.closest('.gm-style');
+
+    if (!clickedInsideMap && foodSpotInfoWindow) {
+        foodSpotInfoWindow.close();
+    }
+
+});
 
 // Fallback or helper function to display your main app's expanded card view layout overlay
 function showMainSpotExpandedCard(spot) {

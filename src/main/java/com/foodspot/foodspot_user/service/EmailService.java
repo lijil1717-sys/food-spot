@@ -1,27 +1,78 @@
-package com.foodspot.foodspot_user.service; // <-- Changed 'Service' to lowercase 'service'
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+package com.foodspot.foodspot_user.service;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@Service 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    @Value("${resend.api.key}")
+    private String apiKey;
+
+    @Value("${resend.from.email}")
+    private String fromEmail;
+
+    private final ObjectMapper objectMapper;
+    private final HttpClient httpClient;
+
+    public EmailService(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+        this.httpClient = HttpClient.newHttpClient();
+    }
 
     public void sendVerificationEmail(String targetEmail, String numericCode) {
-        SimpleMailMessage emailLayout = new SimpleMailMessage();
-        
-        emailLayout.setTo(targetEmail);
-        emailLayout.setSubject("FoodSpot - Your 6-Digit Verification Code");
-        emailLayout.setText(
-            "Welcome to FoodSpot!\n\n" +
-            "Your secure registration code is: " + numericCode + "\n\n" +
-            "This code expires in 5 minutes. Please do not share this with anyone."
-        );
-        
-        mailSender.send(emailLayout);
+
+        try {
+            Map<String, Object> emailBody = Map.of(
+                "from", fromEmail,
+                "to", List.of(targetEmail),
+                "subject", "FoodSpot - Your 6-Digit Verification Code",
+                "text",
+                "Welcome to FoodSpot!\n\n" +
+                "Your secure registration code is: " + numericCode + "\n\n" +
+                "This code expires in 5 minutes. Please do not share this with anyone."
+            );
+
+            String jsonBody = objectMapper.writeValueAsString(emailBody);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.resend.com/emails"))
+                .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                .build();
+
+            HttpResponse<String> response = httpClient.send(
+                request,
+                HttpResponse.BodyHandlers.ofString()
+            );
+
+            if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                throw new IllegalStateException(
+                    "Resend email failed. Status: " +
+                    response.statusCode() + ", Response: " + response.body()
+                );
+            }
+
+            System.out.println("Verification email sent successfully to: " + targetEmail);
+
+        } catch (IOException e) {
+            throw new IllegalStateException("Error communicating with Resend API", e);
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Email sending was interrupted", e);
+        }
     }
 }

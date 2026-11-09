@@ -92,48 +92,74 @@ const API_URL = '/api/auth';
 
     // --- 3. SUB-ACTION: INTERCEPT INLINE "VERIFY" BUTTON CLICKS ---
     
-    // A. Registration Email OTP Request
-    if (sendCodeInlineBtn) {
-        sendCodeInlineBtn.addEventListener("click", async () => {
-            const emailInput = document.getElementById("regEmail");
-            const emailValue = emailInput ? emailInput.value.trim() : "";
+// A. Registration Email OTP Request
+if (sendCodeInlineBtn) {
+    sendCodeInlineBtn.addEventListener("click", async () => {
 
-            if (!emailValue || !emailInput.checkValidity()) {
-                displayMessage(registerForm, "Please enter a valid email address first before requesting a code.", false);
-                return;
+        const emailInput = document.getElementById("regEmail");
+        const emailValue = emailInput ? emailInput.value.trim() : "";
+
+        if (!emailValue || !emailInput.checkValidity()) {
+            displayMessage(
+                registerForm,
+                "Please enter a valid email address first before requesting a code.",
+                false
+            );
+            return;
+        }
+
+        sendCodeInlineBtn.textContent = "Sending...";
+        sendCodeInlineBtn.disabled = true;
+
+        const payload = {
+            name: document.getElementById("regName").value,
+            email: emailValue,
+            password: "TEMPORARY_STUB_HOLD",
+            confirmPassword: "TEMPORARY_STUB_HOLD"
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/register-request`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const textMessage = await response.text();
+
+            if (response.ok) {
+                displayMessage(
+                    registerForm,
+                    "6-digit code has been sent! Check your email.",
+                    true
+                );
+
+            } else if (response.status === 409) {
+                displayMessage(
+                    registerForm,
+                    "This email is already registered. Please login instead.",
+                    false
+                );
+
+            } else {
+                displayMessage(registerForm, textMessage, false);
             }
 
-            sendCodeInlineBtn.textContent = "Sending...";
-            sendCodeInlineBtn.disabled = true;
+        } catch (err) {
+            displayMessage(
+                registerForm,
+                "Error: Network failure contacting verification server.",
+                false
+            );
 
-            const payload = {
-                name: document.getElementById("regName").value,
-                email: emailValue,
-                password: "TEMPORARY_STUB_HOLD", 
-                confirmPassword: "TEMPORARY_STUB_HOLD"
-            };
-
-            try {
-                const response = await fetch(`${API_URL}/register-request`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-                const textMessage = await response.text();
-
-                if (response.ok) {
-                    displayMessage(registerForm, "6-digit code has been sent! Check your Gmail.", true);
-                } else {
-                    displayMessage(registerForm, textMessage, false);
-                }
-            } catch (err) {
-                displayMessage(registerForm, "Error: Network failure contacting verification server.", false);
-            } finally {
-                sendCodeInlineBtn.textContent = "Verify";
-                sendCodeInlineBtn.disabled = false;
-            }
-        });
-    }
+        } finally {
+            sendCodeInlineBtn.textContent = "Verify";
+            sendCodeInlineBtn.disabled = false;
+        }
+    });
+}
 
     // B. Forgot Password Email OTP Request
     if (forgotVerifyBtn) {

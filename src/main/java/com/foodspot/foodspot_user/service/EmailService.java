@@ -23,13 +23,8 @@ public class EmailService {
     @Value("${resend.from.email}")
     private String fromEmail;
 
-    private final ObjectMapper objectMapper;
-    private final HttpClient httpClient;
-
-    public EmailService(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-        this.httpClient = HttpClient.newHttpClient();
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final HttpClient httpClient = HttpClient.newHttpClient();
 
     public void sendVerificationEmail(String targetEmail, String numericCode) {
 
@@ -38,10 +33,9 @@ public class EmailService {
                 "from", fromEmail,
                 "to", List.of(targetEmail),
                 "subject", "FoodSpot - Your 6-Digit Verification Code",
-                "text",
-                "Welcome to FoodSpot!\n\n" +
-                "Your secure registration code is: " + numericCode + "\n\n" +
-                "This code expires in 5 minutes. Please do not share this with anyone."
+                "text", "Welcome to FoodSpot!\n\n" +
+                        "Your secure registration code is: " + numericCode + "\n\n" +
+                        "This code expires in 5 minutes. Please do not share this with anyone."
             );
 
             String jsonBody = objectMapper.writeValueAsString(emailBody);
@@ -60,19 +54,19 @@ public class EmailService {
 
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
                 throw new IllegalStateException(
-                    "Resend email failed. Status: " +
-                    response.statusCode() + ", Response: " + response.body()
+                    "Resend email failed: " + response.statusCode() +
+                    " - " + response.body()
                 );
             }
 
-            System.out.println("Verification email sent successfully to: " + targetEmail);
+            System.out.println("Verification email sent successfully.");
 
         } catch (IOException e) {
-            throw new IllegalStateException("Error communicating with Resend API", e);
+            throw new IllegalStateException("Resend API communication error", e);
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new IllegalStateException("Email sending was interrupted", e);
+            throw new IllegalStateException("Email sending interrupted", e);
         }
     }
 }

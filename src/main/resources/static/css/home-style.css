@@ -2568,3 +2568,51 @@ header, .navbar, .top-nav-bar {
         box-sizing: border-box !important;
     }
 }
+
+/* FIX: iPhone 13 rating and Food Gallery alignment */
+@media screen and (max-width: 768px) {
+
+    #food-spots-container .food-spot-card.is-expanded .spot-rating-box,
+    #food-spots-container .food-spot-card.is-zoomed .spot-rating-box,
+    #food-spots-container .food-spot-card.zoomed .spot-rating-box {
+
+        width: calc(50% - 6px) !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 8px 6px !important;
+        height: 58px !important;
+        min-height: 58px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-around !important;
+        overflow: hidden !important;
+    }
+
+    /* Keep all five stars on one line */
+    #food-spots-container .spot-rating-box .star {
+        font-size: 18px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Gallery button */
+    #food-spots-container .food-spot-card.is-expanded .view-form,
+    #food-spots-container .food-spot-card.is-zoomed .view-form,
+    #food-spots-container .food-spot-card.zoomed .view-form {
+
+        width: calc(50% - 6px) !important;
+        right: 16px !important;
+        margin: 0 !important;
+    }
+
+    #food-spots-container .food-spot-card.is-expanded .view-btn,
+    #food-spots-container .food-spot-card.is-zoomed .view-btn,
+    #food-spots-container .food-spot-card.zoomed .view-btn {
+
+        height: 58px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}

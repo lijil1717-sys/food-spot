@@ -2538,3 +2538,33 @@ header, .navbar, .top-nav-bar {
         transform: scale(0.95);
     }
 }
+
+/* iPhone and mobile alignment fix */
+@media (max-width: 768px) {
+
+    #food-spots-container .food-spot-card.is-expanded .spot-rating-box,
+    #food-spots-container .food-spot-card.is-zoomed .spot-rating-box,
+    #food-spots-container .food-spot-card.zoomed .spot-rating-box {
+        width: 48% !important;
+        min-height: 58px !important;
+        margin: 0 0 12px 0 !important;
+        padding: 8px 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    #food-spots-container .food-spot-card.is-expanded .view-form,
+    #food-spots-container .food-spot-card.is-zoomed .view-form,
+    #food-spots-container .food-spot-card.zoomed .view-form {
+        width: 48% !important;
+        right: 16px !important;
+        margin: 0 !important;
+    }
+
+    #food-spots-container .food-spot-card.is-expanded .view-btn,
+    #food-spots-container .food-spot-card.is-zoomed .view-btn,
+    #food-spots-container .food-spot-card.zoomed .view-btn {
+        width: 100% !important;
+        height: 58px !important;
+        box-sizing: border-box !important;
+    }
+}

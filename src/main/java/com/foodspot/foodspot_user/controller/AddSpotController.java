@@ -1,13 +1,18 @@
+
 package com.foodspot.foodspot_user.controller;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.foodspot.foodspot_user.model.NewSpotModel;
 import com.foodspot.foodspot_user.model.UserModel;
 import com.foodspot.foodspot_user.repository.NewSpotRepository;
 import com.foodspot.foodspot_user.repository.SavedSpotRepository;
 import com.foodspot.foodspot_user.repository.UserRatingRepository;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -20,14 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 @Controller
 public class AddSpotController {
@@ -44,7 +44,15 @@ public class AddSpotController {
     @Autowired
     private NewSpotRepository newSpotRepository;
 
-    private static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
+    @Autowired
+    private Cloudinary cloudinary;
+
+    // Cloudinary folder for all new spot images
+    private static final String CLOUDINARY_FOLDER = "newspots";
+
+    // ------------------------------------------------
+    // SHOW ADD SPOT PAGE
+    // ------------------------------------------------
 
     @GetMapping("/add-spot")
     public String showAddSpotPage(
@@ -53,26 +61,37 @@ public class AddSpotController {
             HttpServletResponse response,
             Model model) {
 
-        // 1. Fetch User details from MongoDB using email stored in session
-        String loggedInEmail = (session != null) ? (String) session.getAttribute("loggedInUserEmail") : null;
-        
-        // ---> SECURITY CHECK: Redirect if user is not logged in <---
+        String loggedInEmail = (session != null)
+                ? (String) session.getAttribute("loggedInUserEmail")
+                : null;
+
+        // Check login
         if (loggedInEmail == null) {
-            boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+
+            boolean isAjax = "XMLHttpRequest".equals(
+                    request.getHeader("X-Requested-With"));
+
             if (isAjax) {
                 try {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Session expired");
+                    response.sendError(
+                            HttpServletResponse.SC_UNAUTHORIZED,
+                            "Session expired");
                     return null;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            return "redirect:/foodspot"; 
+
+            return "redirect:/foodspot";
         }
-        
-        Query userQuery = new Query(Criteria.where("email").is(loggedInEmail));
-        UserModel loggedInUser = mongoTemplate.findOne(userQuery, UserModel.class, "User");
-        
+
+        // Fetch user details
+        Query userQuery = new Query(
+                Criteria.where("email").is(loggedInEmail));
+
+        UserModel loggedInUser = mongoTemplate.findOne(
+                userQuery, UserModel.class, "User");
+
         if (loggedInUser != null) {
             model.addAttribute("userName", loggedInUser.getName());
             model.addAttribute("userEmail", loggedInUser.getEmail());
@@ -82,32 +101,67 @@ public class AddSpotController {
             model.addAttribute("userEmail", loggedInEmail);
         }
 
-        // 2. Count how many spots this user has rated using userId
+        // Count rated spots
         long userRatedCount = 0;
+
         if (loggedInUser != null && loggedInUser.getId() != null) {
-            userRatedCount = userRatingRepository.countByUserId(loggedInUser.getId());
+            userRatedCount =
+                    userRatingRepository.countByUserId(loggedInUser.getId());
         }
+
         model.addAttribute("userRatedCount", userRatedCount);
 
-        // 3. Count how many spots this user has saved using userId
+        // Count saved spots
         long userSavedCount = 0;
+
         if (loggedInUser != null && loggedInUser.getId() != null) {
-            userSavedCount = savedSpotRepository.countByUserId(loggedInUser.getId());
+            userSavedCount =
+                    savedSpotRepository.countByUserId(loggedInUser.getId());
         }
+
         model.addAttribute("userSavedCount", userSavedCount);
 
-        // 4. Count how many spots this user has shared using userId
+        // Count shared spots
         long userSharedCount = 0;
+
         if (loggedInUser != null && loggedInUser.getId() != null) {
-            userSharedCount = newSpotRepository.countByUserId(loggedInUser.getId());
+            userSharedCount =
+                    newSpotRepository.countByUserId(loggedInUser.getId());
         }
+
         model.addAttribute("userSharedCount", userSharedCount);
 
-        return "add-spot"; // Renders add-spot.html with full profile attributes
+        return "add-spot";
     }
+
+    // ------------------------------------------------
+    // CLOUDINARY IMAGE UPLOAD HELPER
+    // ------------------------------------------------
+
+    private String uploadImage(MultipartFile file) throws Exception {
+
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        Map<?, ?> uploadResult = cloudinary.uploader().upload(
+                file.getBytes(),
+                ObjectUtils.asMap(
+                        "folder", CLOUDINARY_FOLDER,
+                        "resource_type", "image"
+                )
+        );
+
+        return (String) uploadResult.get("secure_url");
+    }
+
+    // ------------------------------------------------
+    // ADD NEW SPOT
+    // ------------------------------------------------
 
     @PostMapping("/api/spots")
     public String handleAddSpotSubmission(
+
             @RequestParam("name") String name,
             @RequestParam(value = "place", required = false) String place,
             @RequestParam("district") String district,
@@ -117,21 +171,35 @@ public class AddSpotController {
             @RequestParam(value = "speciality", required = false) String speciality,
             @RequestParam(value = "mapLink", required = false) String mapLink,
             @RequestParam(value = "directions", required = false) String directions,
-            @RequestParam(value = "file", required = false) MultipartFile coverPhoto,
-            @RequestParam(value = "files", required = false) MultipartFile[] additionalFiles,
+
+            @RequestParam(value = "file", required = false)
+            MultipartFile coverPhoto,
+
+            @RequestParam(value = "files", required = false)
+            MultipartFile[] additionalFiles,
+
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        String loggedInEmail = (session != null) ? (String) session.getAttribute("loggedInUserEmail") : null;
+        // Check logged-in user
+        String loggedInEmail = (session != null)
+                ? (String) session.getAttribute("loggedInUserEmail")
+                : null;
+
         if (loggedInEmail == null) {
             return "redirect:/foodspot";
         }
 
-        // Fetch user ID to bind submission to the author
-        Query userQuery = new Query(Criteria.where("email").is(loggedInEmail));
-        UserModel loggedInUser = mongoTemplate.findOne(userQuery, UserModel.class, "User");
+        // Fetch user ID
+        Query userQuery = new Query(
+                Criteria.where("email").is(loggedInEmail));
 
+        UserModel loggedInUser = mongoTemplate.findOne(
+                userQuery, UserModel.class, "User");
+
+        // Create new spot
         NewSpotModel newSpot = new NewSpotModel();
+
         if (loggedInUser != null) {
             newSpot.setUserId(loggedInUser.getId());
         }
@@ -147,44 +215,58 @@ public class AddSpotController {
         newSpot.setMapLink(mapLink);
         newSpot.setDirections(directions);
 
-        // Process File uploads
+        // Upload images to Cloudinary
         try {
-            File directory = new File(UPLOAD_DIR);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
 
-            // Cover photo handler
+            // 1. Upload cover photo to newspots folder
             if (coverPhoto != null && !coverPhoto.isEmpty()) {
-                String coverName = "cover_" + UUID.randomUUID().toString() + "_" + coverPhoto.getOriginalFilename();
-                Path filePath = Paths.get(UPLOAD_DIR + coverName);
-                Files.write(filePath, coverPhoto.getBytes());
-                newSpot.setCoverPhotoUrl("/uploads/" + coverName);
+
+                String coverUrl = uploadImage(coverPhoto);
+
+                newSpot.setCoverPhotoUrl(coverUrl);
             }
 
-            // Additional food photos handler
+            // 2. Upload additional food photos to newspots folder
             List<String> additionalPhotoUrls = new ArrayList<>();
-            if (additionalFiles != null && additionalFiles.length > 0) {
+
+            if (additionalFiles != null) {
+
                 for (MultipartFile file : additionalFiles) {
-                    if (!file.isEmpty()) {
-                        String uniqueName = "food_" + UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                        Path filePath = Paths.get(UPLOAD_DIR + uniqueName);
-                        Files.write(filePath, file.getBytes());
-                        additionalPhotoUrls.add("/uploads/" + uniqueName);
+
+                    if (file != null && !file.isEmpty()) {
+
+                        String photoUrl = uploadImage(file);
+
+                        if (photoUrl != null) {
+                            additionalPhotoUrls.add(photoUrl);
+                        }
                     }
                 }
             }
+
             newSpot.setPhotoUrls(additionalPhotoUrls);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
+
             e.printStackTrace();
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Image upload failed. Please try again."
+            );
+
+            return "redirect:/add-spot";
         }
 
-        // Save entry into 'new_spots' collection
+        // 3. Save spot details and Cloudinary URLs in MongoDB
         newSpotRepository.save(newSpot);
 
-        // Flash message and redirect back to the add-spot page
-        redirectAttributes.addFlashAttribute("successMessage", "Spot has been submitted successfully! After the review by admin, the spot will be added to the main page.");
+        // Success message
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Spot has been submitted successfully! After the review by admin, the spot will be added to the main page."
+        );
+
         return "redirect:/add-spot";
     }
 }

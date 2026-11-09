@@ -2620,3 +2620,32 @@ header, .navbar, .top-nav-bar {
         white-space: nowrap !important;
     }
 }
+
+/* Fix star wrapping in mobile expanded restaurant cards */
+@media screen and (max-width: 768px) {
+
+    #food-spots-container .food-spot-card.is-expanded .spot-rating-box,
+    #food-spots-container .food-spot-card.zoomed .spot-rating-box {
+
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        overflow: hidden !important;
+    }
+
+    #food-spots-container .food-spot-card .spot-rating-box .star {
+        display: inline-block !important;
+        font-size: 19px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        line-height: 1 !important;
+    }
+
+    #food-spots-container .food-spot-card .spot-rating-box .rating-count-text {
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+        font-size: 12px !important;
+    }
+}

@@ -1167,4 +1167,95 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+// Seatrch box //
+document.addEventListener("DOMContentLoaded", function () {
 
+    const searchInput = document.getElementById("foodSpotSearch");
+    const clearButton = document.getElementById("clearFoodSearch");
+
+    const cards = Array.from(
+        document.querySelectorAll(".food-spot-card")
+    );
+
+    const cardsPerPage = 8;
+
+    // Existing pagination elements
+    const paginationContainer = document.querySelector(".pagination-container");
+
+    function searchAllSpots() {
+
+        const keyword = searchInput.value.trim().toLowerCase();
+
+        let matchedCards = [];
+
+        cards.forEach(card => {
+
+            const spotName =
+                card.querySelector(".spot-name")?.textContent || "";
+
+            const location =
+                card.querySelector(".spot-info.location")?.textContent || "";
+
+            // Search spot name, exact place, place, district and state
+            const searchText = (spotName + " " + location).toLowerCase();
+
+            const matches = searchText.includes(keyword);
+
+            if (matches) {
+                matchedCards.push(card);
+            }
+
+            card.style.display = "none";
+        });
+
+        // Show all matching results, ignoring normal pagination
+        matchedCards.forEach(card => {
+            card.style.display = "";
+        });
+
+        // Hide pagination while searching
+        if (paginationContainer) {
+            paginationContainer.style.display =
+                keyword ? "none" : "";
+        }
+
+        // Restore normal pagination when search is cleared
+        if (!keyword) {
+            showNormalPagination();
+        }
+
+        // Show no results message
+        let noResults = document.getElementById("noSearchResults");
+
+        if (!noResults) {
+            noResults = document.createElement("p");
+            noResults.id = "noSearchResults";
+            noResults.textContent = "No spots found.";
+            noResults.style.textAlign = "center";
+            noResults.style.margin = "20px";
+            document
+                .getElementById("food-spots-section-wrapper")
+                .appendChild(noResults);
+        }
+
+        noResults.style.display =
+            keyword && matchedCards.length === 0 ? "block" : "none";
+    }
+
+    function showNormalPagination() {
+
+        cards.forEach((card, index) => {
+            card.style.display =
+                index < cardsPerPage ? "" : "none";
+        });
+    }
+
+    searchInput.addEventListener("input", searchAllSpots);
+
+    clearButton?.addEventListener("click", function () {
+        searchInput.value = "";
+        searchAllSpots();
+        searchInput.focus();
+    });
+
+});

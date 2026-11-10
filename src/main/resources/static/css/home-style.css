@@ -2649,3 +2649,97 @@ header, .navbar, .top-nav-bar {
         font-size: 12px !important;
     }
 }
+
+/* Centered Food Spot Search */
+.food-search-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 25px auto 30px;
+    padding: 0 15px;
+}
+
+.food-search-box {
+    width: 100%;
+    max-width: 520px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.food-search-box:focus-within {
+    border-color: #ff9800;
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.12);
+}
+
+.food-search-box i {
+    color: #888888;
+    font-size: 17px;
+}
+
+.food-search-box input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 15px;
+    color: #222222;
+}
+
+.food-search-box input::placeholder {
+    color: #999999;
+}
+
+#clearFoodSearch {
+    display: none;
+    border: none;
+    background: transparent;
+    color: #888888;
+    font-size: 25px;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+#clearFoodSearch:hover {
+    color: #ff7900;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .food-search-container {
+        margin: 20px auto 25px;
+        padding: 0 18px;
+    }
+
+    .food-search-box {
+        max-width: 100%;
+        height: 46px;
+    }
+
+    .food-search-box input {
+        font-size: 14px;
+    }
+}
+
+/* Hide cards that don't match search */
+.food-spot-card.search-hidden {
+    display: none !important;
+}
+.search-hidden {
+    display: none !important;
+}
+#noSearchResults {
+    color: #777;
+    font-size: 16px;
+    font-weight: 500;
+}

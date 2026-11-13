@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -171,7 +172,7 @@ public class UserController {
         newUser.setPassword(encryptedPassword);
         
         // ---> STORE CURRENT TIME AND DATE <---
-        newUser.setCreatedAt(LocalDateTime.now());
+        newUser.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Kolkata")));
 
         System.out.println("💾 SAVING TO MONGODB -> Name: " + newUser.getName() + ", Email: " + newUser.getEmail() + ", CreatedAt: " + newUser.getCreatedAt());
 

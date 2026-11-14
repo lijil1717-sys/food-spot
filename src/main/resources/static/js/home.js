@@ -683,65 +683,116 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// ==========================================================================
-// STYLISH FOOD SPOTS PAGINATION & SLIDER CONTROLLER
-// ==========================================================================
+
+// ==========================================
+// FOOD SPOTS PAGINATION CONTROLLER
+// ==========================================
+
 let currentFoodPage = 0;
 
+const FOOD_CARDS_PER_PAGE = 8;
+const PAGE_NUMBERS_LIMIT = 10;
+
 function updateFoodSpotsPagination() {
-    const cards = document.querySelectorAll('#food-spots-container .food-spot-card');
+
+    const cards = document.querySelectorAll(
+        '#food-spots-container .food-spot-card'
+    );
+
     if (cards.length === 0) return;
 
-    const totalPages = Math.ceil(cards.length / 8);
-    
-    // Bounds check
-    if (currentFoodPage >= totalPages) currentFoodPage = totalPages - 1;
-    if (currentFoodPage < 0) currentFoodPage = 0;
+    const totalPages = Math.ceil(
+        cards.length / FOOD_CARDS_PER_PAGE
+    );
 
-    // Show/Hide cards for current page
+    currentFoodPage = Math.max(
+        0,
+        Math.min(currentFoodPage, totalPages - 1)
+    );
+
+    // Display cards for the selected page
     cards.forEach((card, index) => {
-        const cardPage = Math.floor(index / 8);
-        card.style.display = (cardPage === currentFoodPage) ? "" : "none";
+        const cardPage = Math.floor(
+            index / FOOD_CARDS_PER_PAGE
+        );
+
+        card.style.display =
+            cardPage === currentFoodPage ? "" : "none";
     });
 
-    // Populate ALL pagination number containers found on the page (both top and bottom)
-    const numberContainers = document.querySelectorAll('.pagination-numbers-flex');
-    numberContainers.forEach(numbersContainer => {
-        numbersContainer.innerHTML = "";
-        for (let i = 0; i < totalPages; i++) {
-            const pageNumBtn = document.createElement('button');
-            pageNumBtn.type = "button";
-            pageNumBtn.className = `page-num-pill ${i === currentFoodPage ? 'active' : ''}`;
-            pageNumBtn.textContent = i + 1;
-            pageNumBtn.onclick = () => goToPage(i);
-            numbersContainer.appendChild(pageNumBtn);
+    // Calculate the current group of 10 page numbers
+    const startPage =
+        Math.floor(currentFoodPage / PAGE_NUMBERS_LIMIT)
+        * PAGE_NUMBERS_LIMIT;
+
+    const endPage = Math.min(
+        startPage + PAGE_NUMBERS_LIMIT,
+        totalPages
+    );
+
+    // Update page number buttons
+    document.querySelectorAll(
+        '.pagination-numbers-flex'
+    ).forEach(container => {
+
+        container.innerHTML = "";
+
+        for (let i = startPage; i < endPage; i++) {
+
+            const pageButton = document.createElement("button");
+
+            pageButton.type = "button";
+
+            pageButton.className =
+                `page-num-pill ${
+                    i === currentFoodPage ? "active" : ""
+                }`;
+
+            pageButton.textContent = i + 1;
+
+            pageButton.onclick = () => goToPage(i);
+
+            container.appendChild(pageButton);
         }
     });
 
-    // Toggle Previous / Next arrow buttons state for all pagination bars
-    const prevBtns = document.querySelectorAll('.stylish-pagination-controls .prev-btn');
-    const nextBtns = document.querySelectorAll('.stylish-pagination-controls .next-btn');
-    
-    prevBtns.forEach(btn => btn.disabled = currentFoodPage === 0);
-    nextBtns.forEach(btn => btn.disabled = currentFoodPage >= totalPages - 1);
+    // Previous and Next navigate between groups of 10
+    document.querySelectorAll(
+        '.stylish-pagination-controls .prev-btn'
+    ).forEach(btn => {
+        btn.disabled = startPage === 0;
+    });
+
+    document.querySelectorAll(
+        '.stylish-pagination-controls .next-btn'
+    ).forEach(btn => {
+        btn.disabled = endPage >= totalPages;
+    });
 }
 
+// Navigate to previous or next group of 10 pages
 function slideFoodSpots(direction) {
-    currentFoodPage += direction;
+
+    currentFoodPage += direction * PAGE_NUMBERS_LIMIT;
+
     updateFoodSpotsPagination();
     scrollToSpotsTop();
 }
 
+// Navigate to a selected page
 function goToPage(pageNum) {
+
     currentFoodPage = pageNum;
+
     updateFoodSpotsPagination();
     scrollToSpotsTop();
 }
 
-// Run on page load
+// Initialize pagination
 document.addEventListener("DOMContentLoaded", () => {
     updateFoodSpotsPagination();
 });
+
 
 // ==========================================================================
 // SCROLL TO SPOTS SECTION TOP ON PAGINATION CHANGE

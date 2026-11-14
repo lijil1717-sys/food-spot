@@ -2648,6 +2648,39 @@ header, .navbar, .top-nav-bar {
         white-space: nowrap !important;
         font-size: 12px !important;
     }
+
+    .stylish-pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 45px;
+    margin-bottom: 30px;
+    padding: 10px;
+}
+
+.pagination-numbers-flex {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-num-pill {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    color: #475569;
+    font-weight: 500;
+    font-size: 14px;
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 }
 
 /* Centered Food Spot Search */

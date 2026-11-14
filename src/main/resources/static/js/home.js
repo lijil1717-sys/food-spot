@@ -689,9 +689,10 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
 
 let currentFoodPage = 0;
+const FOOD_PAGE_NUMBERS_LIMIT = 7;
 
 const FOOD_CARDS_PER_PAGE = 8;
-const PAGE_NUMBERS_LIMIT = 10;
+const PAGE_NUMBERS_LIMIT = 7;
 
 function updateFoodSpotsPagination() {
 
